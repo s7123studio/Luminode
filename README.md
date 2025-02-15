@@ -2,7 +2,7 @@
 
 [![PHP Version](https://img.shields.io/badge/PHP-≥7.4-777BB4?logo=php)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/Docs-Luminode.dev-brightgreen)](https://xxx)
+[![Documentation](https://img.shields.io/badge/Docs-Luminode-brightgreen)](https://Luminode.s7123.xyz)
 
 **光速启航的PHP轻量级框架** • [English Version](README_EN.md)
 
@@ -17,7 +17,7 @@
 - **全栈支持** - 从路由到模板引擎一站式解决方案
 
 ## 🚀 快速开始
-👉[查看官方文档](https://xxx)
+👉[查看官方文档](https://Luminode.s7123.xyz)
 ## 🛠️ 功能全景
 <table>
     <thead>
@@ -80,4 +80,4 @@
 
 ## 📜 开源协议
 本项目采用 MIT 许可证，保留核心开发者署名权利。商业使用请遵循补充条款.
-<p><strong>星光不问赶路人</strong> - <a href="https://xxx" target="_blank" rel="noreferrer">立即探索完整文档</a> | <a href="https://qm.qq.com/q/jMO3KX4IiA" target="_blank" rel="noreferrer">加入QQ群</a></p>
+<p><strong>星光不问赶路人</strong> - <a href="https://Luminode.s7123.xyz" target="_blank" rel="noreferrer">立即探索完整文档</a> | <a href="https://qm.qq.com/q/jMO3KX4IiA" target="_blank" rel="noreferrer">加入QQ群</a></p>
