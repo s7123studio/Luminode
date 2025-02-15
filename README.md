@@ -80,4 +80,4 @@
 
 ## 📜 开源协议
 本项目采用 MIT 许可证，保留核心开发者署名权利。商业使用请遵循补充条款.
-<p><strong>星光不问赶路人</strong> - <a href="https://xxx" target="_blank" rel="noreferrer">立即探索完整文档</a> | <a href="https://xxxx" target="_blank" rel="noreferrer">加入QQ群</a></p>
+<p><strong>星光不问赶路人</strong> - <a href="https://xxx" target="_blank" rel="noreferrer">立即探索完整文档</a> | <a href="https://qm.qq.com/q/jMO3KX4IiA" target="_blank" rel="noreferrer">加入QQ群</a></p>
