@@ -1,8 +1,8 @@
 # Luminode Framework 🚀
 
-[![PHP Version](https://img.shields.io/badge/PHP-≥8.0-777BB4?logo=php)](https://php.net)
+[![PHP Version](https://img.shields.io/badge/PHP-≥7.4-777BB4?logo=php)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/Docs-Luminode.dev-brightgreen)](https://luminode.dev)
+[![Documentation](https://img.shields.io/badge/Docs-Luminode.dev-brightgreen)](https://xxx)
 
 **光速启航的PHP轻量级框架** • [English Version](README_EN.md)
 
@@ -17,7 +17,7 @@
 - **全栈支持** - 从路由到模板引擎一站式解决方案
 
 ## 🚀 快速开始
-访问官网
+👉[查看官方文档](https://xxx)
 ## 🛠️ 功能全景
 <table>
     <thead>
