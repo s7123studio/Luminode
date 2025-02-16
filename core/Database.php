@@ -8,16 +8,17 @@ class Database {
     // 构造函数，用于初始化数据库连接
     public function __construct() {
         // 引入数据库配置文件
-        require 'config/database.php';
+        require '../config/database.php';
         // 创建一个新的 PDO 对象，用于与数据库进行交互
-        $this->pdo = new PDO(
-            // 数据库连接字符串，包含主机名和数据库名
-            "mysql:host={$config['host']};dbname={$config['dbname']}", 
-            // 数据库用户名
-            $config['username'], 
-            // 数据库密码
-            $config['password']
-        );
+        try {
+            $this->pdo = new PDO(
+                "mysql:host={$config['host']};dbname={$config['dbname']}",
+                $config['username'],
+                $config['password']
+            );
+        } catch (PDOException $e) {
+            die("数据库连接失败: " . $e->getMessage());
+        }
     }
     
     // 执行 SQL 查询的公共方法

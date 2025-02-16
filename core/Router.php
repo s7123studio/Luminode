@@ -1,10 +1,18 @@
 <?php
-
 // 定义一个路由器类，用于处理HTTP请求的路由
+require '../app/controllers/HomeController.php';
 class Router {
     // 用于存储路由信息的私有属性，初始为空数组
     private $routes = [];
-    
+
+    protected function resolveController($callback) {
+        if (is_string($callback)) {
+            list($class, $method) = explode('@', $callback);
+            $controller = "App\\Controllers\\{$class}";
+            return [new $controller, $method];
+        }
+        return $callback;
+    }
     // 定义一个方法用于注册GET请求的路由
     // $path: 路由的路径
     // $callback: 当匹配到该路由时执行的回调函数
@@ -20,7 +28,6 @@ class Router {
         // 将路由路径和回调函数存储到routes数组的POST键下
         $this->routes['POST'][$path] = $callback;
     }
-    
     // 定义一个方法用于运行路由器，处理实际的HTTP请求
     public function run() {
         // 获取当前请求的HTTP方法（如GET, POST等）
@@ -36,7 +43,7 @@ class Router {
                 return call_user_func($callback);
             }
         }
-        
+
         // 如果没有找到匹配的路由，返回404状态码
         http_response_code(404);
         // 输出"Page not found"表示页面未找到
