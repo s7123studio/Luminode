@@ -6,6 +6,8 @@ require '../core/Router.php';
 require '../core/Database.php';
 // 引入核心认证类文件
 require '../core/Auth.php';
+// 自动加载Controller
+require '../core/Controller.php';
 // 启动会话
 session_start();
 
@@ -14,12 +16,22 @@ $router = new Router();
 
 // 路由配置
 $router->get('/', function() {
-    // 使用完全限定名称引入 HomeController 类并调用其 index 方法
+    // 使用HomeController 调用其 index 方法
+    
     (new HomeController())->index();
 });
 
+$router->get('/admin/', function() {
+    // 使用AdminController 调用其 index 方法
+    (new AdminController())->index();
+});
+
+$router->post('/update_settings', function() {
+    include '../app/controllers/update_settings.php';
+});
+
 $router->get('/guide', function() {
-    // 使用完全限定名称引入 HomeController 类并调用其 guide 方法
+    // 使用HomeController 调用其 guide 方法
     (new HomeController())->guide();
 });
 
@@ -27,7 +39,7 @@ $router->get('/guide', function() {
 $router->get('/post/{id}', function() {
     // 从 GET 参数中获取 id 并转换为整数
     $id = (int) $_GET['id'];
-    // 使用完全限定名称引入 HomeController 类并调用其 showPost 方法，传入 id 参数
+    // 使用HomeController 类并调用其 showPost 方法，传入 id 参数
     (new HomeController())->showPost($id);
 });
 // 更多路由...
