@@ -1,0 +1,164 @@
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #3e4149;
+    color: #fff;
+    min-height: 100vh;
+    background-image: url('/images/Luminode_Ox2.webp');
+    background-size: contain; /* 改为 contain 以适配屏幕 */
+    background-position: center; /* 改为 center 以居中显示 */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+
+/* 动态背景遮罩 */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(68, 79, 90, 0.9), rgba(62, 65, 73, 0.95));
+    z-index: -1;
+}
+
+/* 卡片式容器 */
+.settings-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cardEntrance {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 表单组 */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+/* 输入框样式 */
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #ff9999;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 15px rgba(255, 153, 153, 0.3);
+}
+
+/* 浮动标签 */
+.input-label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus + .input-label,
+.input-field:not(:placeholder-shown) + .input-label {
+    top: -10px;
+    left: 0.8rem;
+    font-size: 0.8rem;
+    color: #ffc8c8;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #ff9999, #ffc8c8);
+    border: none;
+    border-radius: 8px;
+    color: #444f5a;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn::after {
+    content: '→';
+    position: absolute;
+    right: -20px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 153, 153, 0.4);
+}
+
+.btn:hover::after {
+    right: 15px;
+}
+
+/* 标题样式 */
+.settings-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #ffc8c8, #ff9999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGlow 2s infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 200, 200, 0.3);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(255, 153, 153, 0.6);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .settings-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+}

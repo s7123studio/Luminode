@@ -1,5 +1,4 @@
 <?php
-
 // 引入核心路由类文件
 require '../core/Router.php';
 // 引入核心数据库类文件
@@ -24,6 +23,10 @@ $router->get('/', function() {
 $router->get('/admin/', function() {
     // 使用AdminController 调用其 index 方法
     (new AdminController())->index();
+});
+
+$router->post('/login', function() {
+    include '../app/controllers/admin_login.php';
 });
 
 $router->post('/update_settings', function() {
