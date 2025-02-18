@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 1Panel-mysql-wy3J
--- 生成日期： 2025-02-18 15:27:28
+-- 生成日期： 2025-02-18 15:54:09
 -- 服务器版本： 8.2.0
 -- PHP 版本： 8.2.27
 
@@ -69,7 +69,7 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `key`, `value`, `created_at`) VALUES
 (1, 'sitename', '个人引导页示例', '2025-02-17 01:29:17'),
-(2, 'signature', '光启代码，枢连万物<br>默认后台账号密码：admin，12345678', '2025-02-17 21:56:06'),
+(2, 'signature', '光启代码，枢连万物<br>后台地址：/admin<br>账号密码：admin，12345678', '2025-02-17 21:56:06'),
 (10, 'link_1_name', '链接', '2025-02-17 22:04:12'),
 (11, 'link_1', 'https://example.com', '2025-02-17 22:04:12'),
 (12, 'link_2_name', '链接', '2025-02-17 22:04:12'),
