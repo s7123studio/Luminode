@@ -61,9 +61,9 @@
                     <label class="input-label">个性签名:</label>
                 </div>
 
-                <div class="form-group">
-
-                </div>
+                <div class="form-group"></div>
+                <h2 class="settings-title" style="font-size: 1.8rem;">链接</h2>
+                <div class="form-group"></div>
 
                 <div class="form-group">
                     <input type="text" id="link_1_name" name="link_1_name" class="input-field"
@@ -124,7 +124,9 @@
                            value="<?php echo $link_5; ?>" placeholder=" ">
                     <label class="input-label">链接5 地址:</label>
                 </div>
-                
+
+                <h2 class="settings-title" style="font-size: 1.8rem;">版权信息</h2>
+                <div class="form-group"></div>
                 <div class="form-group">
                     <input type="text" id="Copyright_date" name="Copyright_date" class="input-field"
                            value="<?php echo $Copyright_date; ?>" placeholder=" ">
@@ -142,7 +144,11 @@
                            value="<?php echo $Copyright_Customize; ?>" placeholder=" ">
                     <label class="input-label">版权下方自定义：</label>
                 </div>
-                
+
+                <div class="form-group"></div>
+                <h2 class="settings-title" style="font-size: 1.8rem;">第三方链接</h2>
+                <div class="form-group"></div>
+
                 <div class="form-group">
                     <input type="text" id="QQ_link" name="QQ_link" class="input-field"
                            value="<?php echo $QQ_link; ?>" placeholder=" ">
@@ -171,6 +177,12 @@
                     <input type="text" id="Gitee_link" name="Gitee_link" class="input-field"
                            value="<?php echo $Gitee_link; ?>" placeholder=" ">
                     <label class="input-label">Gitee链接：</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="BiLiBiLi_link" name="BiLiBiLi_link" class="input-field"
+                           value="<?php echo $BiLiBiLi_link; ?>" placeholder=" ">
+                    <label class="input-label">Bilibili链接：</label>
                 </div>
 
                 <div class="form-group">

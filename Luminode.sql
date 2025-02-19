@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 1Panel-mysql-wy3J
--- 生成日期： 2025-02-18 15:54:09
+-- 生成日期： 2025-02-19 17:18:36
 -- 服务器版本： 8.2.0
 -- PHP 版本： 8.2.27
 
@@ -76,22 +76,23 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`) VALUES
 (13, 'link_2', 'https://example.com', '2025-02-17 22:04:12'),
 (14, 'link_3_name', '链接', '2025-02-17 22:04:12'),
 (15, 'link_3', 'https://example.com', '2025-02-17 22:04:12'),
-(16, 'link_4_name', '链接', '2025-02-17 22:04:12'),
-(17, 'link_4', 'https://example.com', '2025-02-17 22:04:12'),
-(18, 'link_5_name', '链接', '2025-02-17 22:04:12'),
-(19, 'link_5', 'https://example.com', '2025-02-17 22:04:12'),
+(16, 'link_4_name', '', '2025-02-17 22:04:12'),
+(17, 'link_4', '', '2025-02-17 22:04:12'),
+(18, 'link_5_name', '', '2025-02-17 22:04:12'),
+(19, 'link_5', '', '2025-02-17 22:04:12'),
 (20, 'site_description', '个人引导页示例', '2025-02-17 22:28:46'),
 (21, 'Copyright_date', '2024', '2025-02-17 22:32:59'),
 (22, 'Copyright_name', '7123 Studio', '2025-02-17 22:35:26'),
 (23, 'Copyright_Customize', '愿你的青春如花般绽放', '2025-02-17 22:37:57'),
-(24, 'QQ_link', 'https://example.com/', '2025-02-17 22:48:12'),
+(24, 'QQ_link', 'https://qq.com', '2025-02-17 22:48:12'),
 (25, 'Mail_link', 's7123@foxmail.com', '2025-02-17 23:31:48'),
 (26, 'Money_link', 'https://example.com/', '2025-02-17 23:27:15'),
-(28, 'Gitee_link', 'https://example.com/', '2025-02-17 23:29:00'),
-(29, 'Coolapk_link', 'https://example.com/', '2025-02-17 23:29:55'),
+(28, 'Gitee_link', '', '2025-02-17 23:29:00'),
+(29, 'Coolapk_link', '', '2025-02-17 23:29:55'),
 (30, 'avatar_link', '\\images\\Luminode.webp', '2025-02-17 23:33:26'),
 (31, 'site_favicon', '\\images\\Luminode.webp', '2025-02-17 23:53:53'),
-(32, 'Github_link', 'https://example.com/', '2025-02-18 01:12:27');
+(32, 'Github_link', 'https://github.com/s7123studio', '2025-02-18 01:12:27'),
+(33, 'BiLiBiLi_link', 'https://space.bilibili.com/1723849342', '2025-02-19 20:41:51');
 
 -- --------------------------------------------------------
 
@@ -171,7 +172,7 @@ ALTER TABLE `posts`
 -- 使用表AUTO_INCREMENT `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- 使用表AUTO_INCREMENT `users`

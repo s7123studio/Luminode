@@ -1,416 +1,232 @@
-/*
-此源码是基于 Dimension 的二次修改
-Github：https://github.com/nianbroken/Personal_Sakura_Guide_Page
-Gitee：https://gitee.com/nianbroken/Personal_Sakura_Guide_Page
-*/
-// main.js
+// 加载完成后隐藏加载动画
+window.addEventListener('load', () => {
+    document.querySelector('.loader').style.opacity = '0';
+    setTimeout(() => {
+        document.querySelector('.loader').style.display = 'none';
+    }, 500);
 
-// Document ready function
-$(document).ready(function() {
-    // Initialize your scripts here
+    // 初始化动画观察者
+    initAnimations();
+    // 检测是否为移动设备，并移除 .fixed-footer 类
+    if (isMobile) {
+        document.querySelector('footer').classList.remove('fixed-footer');
+    }
 });
 
-// Example function
-function exampleFunction() {
-    // Your code here
+// IP获取
+fetch('https://api.s7123.xyz/cityjson.php')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('ip-address').textContent = data.cip;
+    })
+    .catch(() => {
+        document.getElementById('ip-address').textContent = '获取失败';
+    });
+
+// 交互动画
+function initAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px'
+    };
+
+    const animateElements = document.querySelectorAll('.animate-pop-in, .animate-fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    animateElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        observer.observe(element);
+    });
 }
 
-// Another example function
-function anotherExampleFunction() {
-    // Your code here
+// 优化光效位置更新
+document.querySelectorAll('.link-item').forEach(button => {
+    const glow = button.querySelector('.harmony-glow');
+    let targetX = 50, currentX = 50;
+    let targetY = 50, currentY = 50;
+
+    button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        targetX = ((e.clientX - rect.left) / rect.width) * 100;
+        targetY = ((e.clientY - rect.top) / rect.height) * 100;
+    });
+
+    function animate() {
+        currentX += (targetX - currentX) * 0.15;
+        currentY += (targetY - currentY) * 0.15;
+        
+        glow.style.setProperty('--glow-x', `${currentX}%`);
+        glow.style.setProperty('--glow-y', `${currentY}%`);
+        
+        requestAnimationFrame(animate);
+    }
+    animate();
+});
+// 生成动态粒子
+function createParticles() {
+    const container = document.createElement('div');
+    container.className = 'harmony-particles';
+    
+    for(let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 2}s`;
+        container.appendChild(particle);
+    }
+    
+    document.querySelector('.background').appendChild(container);
 }
-(function($) {
-
-	var	$window = $(window),
-		$body = $('body'),
-		$wrapper = $('#wrapper'),
-		$header = $('#header'),
-		$footer = $('#footer'),
-		$main = $('#main'),
-		$main_articles = $main.children('article');
-
-	// Breakpoints.
-		breakpoints({
-			xlarge:   [ '1281px',  '1680px' ],
-			large:    [ '981px',   '1280px' ],
-			medium:   [ '737px',   '980px'  ],
-			small:    [ '481px',   '736px'  ],
-			xsmall:   [ '361px',   '480px'  ],
-			xxsmall:  [ null,      '360px'  ]
-		});
-
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
-
-	// Fix: Flexbox min-height bug on IE.
-		if (browser.name == 'ie') {
-
-			var flexboxFixTimeoutId;
-
-			$window.on('resize.flexbox-fix', function() {
-
-				clearTimeout(flexboxFixTimeoutId);
-
-				flexboxFixTimeoutId = setTimeout(function() {
-
-					if ($wrapper.prop('scrollHeight') > $window.height())
-						$wrapper.css('height', 'auto');
-					else
-						$wrapper.css('height', '100vh');
-
-				}, 250);
-
-			}).triggerHandler('resize.flexbox-fix');
-
-		}
-
-	// Nav.
-		var $nav = $header.children('nav'),
-			$nav_li = $nav.find('li');
-
-		// Add "middle" alignment classes if we're dealing with an even number of items.
-			if ($nav_li.length % 2 == 0) {
-
-				$nav.addClass('use-middle');
-				$nav_li.eq( ($nav_li.length / 2) ).addClass('is-middle');
-
-			}
-
-	// Main.
-		var	delay = 325,
-			locked = false;
-
-		// Methods.
-			$main._show = function(id, initial) {
-
-				var $article = $main_articles.filter('#' + id);
-
-				// No such article? Bail.
-					if ($article.length == 0)
-						return;
-
-				// Handle lock.
-
-					// Already locked? Speed through "show" steps w/o delays.
-						if (locked || (typeof initial != 'undefined' && initial === true)) {
-
-							// Mark as switching.
-								$body.addClass('is-switching');
-
-							// Mark as visible.
-								$body.addClass('is-article-visible');
-
-							// Deactivate all articles (just in case one's already active).
-								$main_articles.removeClass('active');
-
-							// Hide header, footer.
-								$header.hide();
-								$footer.hide();
-
-							// Show main, article.
-								$main.show();
-								$article.show();
-
-							// Activate article.
-								$article.addClass('active');
-
-							// Unlock.
-								locked = false;
-
-							// Unmark as switching.
-								setTimeout(function() {
-									$body.removeClass('is-switching');
-								}, (initial ? 1000 : 0));
-
-							return;
-
-						}
-
-					// Lock.
-						locked = true;
-
-				// Article already visible? Just swap articles.
-					if ($body.hasClass('is-article-visible')) {
-
-						// Deactivate current article.
-							var $currentArticle = $main_articles.filter('.active');
-
-							$currentArticle.removeClass('active');
-
-						// Show article.
-							setTimeout(function() {
-
-								// Hide current article.
-									$currentArticle.hide();
-
-								// Show article.
-									$article.show();
-
-								// Activate article.
-									setTimeout(function() {
-
-										$article.addClass('active');
-
-										// Window stuff.
-											$window
-												.scrollTop(0)
-												.triggerHandler('resize.flexbox-fix');
-
-										// Unlock.
-											setTimeout(function() {
-												locked = false;
-											}, delay);
-
-									}, 25);
-
-							}, delay);
-
-					}
-
-				// Otherwise, handle as normal.
-					else {
-
-						// Mark as visible.
-							$body
-								.addClass('is-article-visible');
-
-						// Show article.
-							setTimeout(function() {
-
-								// Hide header, footer.
-									$header.hide();
-									$footer.hide();
-
-								// Show main, article.
-									$main.show();
-									$article.show();
-
-								// Activate article.
-									setTimeout(function() {
-
-										$article.addClass('active');
-
-										// Window stuff.
-											$window
-												.scrollTop(0)
-												.triggerHandler('resize.flexbox-fix');
-
-										// Unlock.
-											setTimeout(function() {
-												locked = false;
-											}, delay);
-
-									}, 25);
-
-							}, delay);
-
-					}
-
-			};
-
-			$main._hide = function(addState) {
-
-				var $article = $main_articles.filter('.active');
-
-				// Article not visible? Bail.
-					if (!$body.hasClass('is-article-visible'))
-						return;
-
-				// Add state?
-					if (typeof addState != 'undefined'
-					&&	addState === true)
-						history.pushState(null, null, '#');
-
-				// Handle lock.
-
-					// Already locked? Speed through "hide" steps w/o delays.
-						if (locked) {
-
-							// Mark as switching.
-								$body.addClass('is-switching');
-
-							// Deactivate article.
-								$article.removeClass('active');
-
-							// Hide article, main.
-								$article.hide();
-								$main.hide();
-
-							// Show footer, header.
-								$footer.show();
-								$header.show();
-
-							// Unmark as visible.
-								$body.removeClass('is-article-visible');
-
-							// Unlock.
-								locked = false;
-
-							// Unmark as switching.
-								$body.removeClass('is-switching');
-
-							// Window stuff.
-								$window
-									.scrollTop(0)
-									.triggerHandler('resize.flexbox-fix');
-
-							return;
-
-						}
-
-					// Lock.
-						locked = true;
-
-				// Deactivate article.
-					$article.removeClass('active');
-
-				// Hide article.
-					setTimeout(function() {
-
-						// Hide article, main.
-							$article.hide();
-							$main.hide();
-
-						// Show footer, header.
-							$footer.show();
-							$header.show();
-
-						// Unmark as visible.
-							setTimeout(function() {
-
-								$body.removeClass('is-article-visible');
-
-								// Window stuff.
-									$window
-										.scrollTop(0)
-										.triggerHandler('resize.flexbox-fix');
-
-								// Unlock.
-									setTimeout(function() {
-										locked = false;
-									}, delay);
-
-							}, 25);
-
-					}, delay);
-
-
-			};
-
-		// Articles.
-			$main_articles.each(function() {
-
-				var $this = $(this);
-
-				// Close.
-					$('<div class="close">Close</div>')
-						.appendTo($this)
-						.on('click', function() {
-							location.hash = '';
-						});
-
-				// Prevent clicks from inside article from bubbling.
-					$this.on('click', function(event) {
-						event.stopPropagation();
-					});
-
-			});
-
-		// Events.
-			$body.on('click', function(event) {
-
-				// Article visible? Hide.
-					if ($body.hasClass('is-article-visible'))
-						$main._hide(true);
-
-			});
-
-			$window.on('keyup', function(event) {
-
-				switch (event.keyCode) {
-
-					case 27:
-
-						// Article visible? Hide.
-							if ($body.hasClass('is-article-visible'))
-								$main._hide(true);
-
-						break;
-
-					default:
-						break;
-
-				}
-
-			});
-
-			$window.on('hashchange', function(event) {
-
-				// Empty hash?
-					if (location.hash == ''
-					||	location.hash == '#') {
-
-						// Prevent default.
-							event.preventDefault();
-							event.stopPropagation();
-
-						// Hide.
-							$main._hide();
-
-					}
-
-				// Otherwise, check for a matching article.
-					else if ($main_articles.filter(location.hash).length > 0) {
-
-						// Prevent default.
-							event.preventDefault();
-							event.stopPropagation();
-
-						// Show article.
-							$main._show(location.hash.substr(1));
-
-					}
-
-			});
-
-		// Scroll restoration.
-		// This prevents the page from scrolling back to the top on a hashchange.
-			if ('scrollRestoration' in history)
-				history.scrollRestoration = 'manual';
-			else {
-
-				var	oldScrollPos = 0,
-					scrollPos = 0,
-					$htmlbody = $('html,body');
-
-				$window
-					.on('scroll', function() {
-
-						oldScrollPos = scrollPos;
-						scrollPos = $htmlbody.scrollTop();
-
-					})
-					.on('hashchange', function() {
-						$window.scrollTop(oldScrollPos);
-					});
-
-			}
-
-		// Initialize.
-
-			// Hide main, articles.
-				$main.hide();
-				$main_articles.hide();
-
-			// Initial article.
-				if (location.hash != ''
-				&&	location.hash != '#')
-					$window.on('load', function() {
-						$main._show(location.hash.substr(1), true);
-					});
-
-})(jQuery);
+createParticles();
+// 背景光效交互
+document.addEventListener('mousemove', (e) => {
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+    
+    document.documentElement.style.setProperty('--harmony-glow', 
+        `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(90,139,255,0.3), transparent 60%)`);
+});
+function initAnimations() {
+    try {
+        if (!('IntersectionObserver' in window)) {
+            throw new Error('Browser not supported');
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.05,
+            rootMargin: '20px'
+        });
+
+        document.querySelectorAll('.animate-pop-in, .animate-fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+    } catch (error) {
+        console.error('Animation Error:', error);
+        document.querySelectorAll('.animate-pop-in, .animate-fade-in').forEach(element => {
+            element.classList.add('active');
+        });
+    }
+}
+
+// 启动动画
+document.addEventListener('DOMContentLoaded', initAnimations);
+// 保底显示
+setTimeout(() => {
+    document.querySelectorAll('.animate-pop-in, .animate-fade-in').forEach(element => {
+        element.classList.add('active');
+    });
+}, 1000);
+// 模式切换功能
+const themeToggle = document.querySelector('.theme-toggle');
+const html = document.documentElement;
+
+// 初始化主题
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', savedTheme);
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    // 添加过渡类
+    html.classList.add('theme-changing');
+    setTimeout(() => html.classList.remove('theme-changing'), 400);
+    
+    // 更新主题
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    // 更新SVG颜色
+    updateSvgColors(newTheme);
+    // 鸿蒙特色动画
+    animateThemeChange(newTheme);
+});
+
+function animateThemeChange(theme) {
+    const particles = document.createElement('div');
+    particles.className = 'theme-change-particles';
+    
+    for(let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'theme-particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.background = theme === 'dark' ? '#5A8BFF' : '#fff';
+        particles.appendChild(particle);
+    }
+    
+    document.body.appendChild(particles);
+    setTimeout(() => particles.remove(), 1000);
+}
+// 动态模糊参数调整
+document.querySelectorAll('.link-item').forEach(button => {
+    let hoverProgress = 0;
+    
+    button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // 动态调整模糊强度
+        const distanceFromCenter = Math.sqrt(
+            Math.pow(x - rect.width/2, 2) + 
+            Math.pow(y - rect.height/2, 2)
+        );
+        const blurValue = 20 + (distanceFromCenter / 50);
+        button.style.setProperty('--dynamic-blur', `${Math.min(blurValue, 40)}px`);
+        
+        // 光纹位置跟踪
+        button.style.backgroundPosition = `
+            ${(x/rect.width)*100}% ${(y/rect.height)*100}%`;
+    });
+    
+    button.addEventListener('mouseleave', () => {
+        button.style.removeProperty('--dynamic-blur');
+        button.style.removeProperty('background-position');
+    });
+});
+document.addEventListener('copy', function(e) {
+    e.preventDefault();
+    return false;
+});
+let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+if (isMobile) {
+    document.querySelectorAll('.link-item').forEach(button => {
+        button.addEventListener('touchstart', () => {
+            button.classList.add('active');
+        });
+
+        button.addEventListener('touchend', () => {
+            setTimeout(() => button.classList.remove('active'), 300);
+        });
+    });
+}
+function updateSvgColors(theme) {
+    const icons = document.querySelectorAll('.social-item img');
+    icons.forEach(icon => {
+        if (theme === 'dark') {
+            icon.style.filter = 'invert(1)'; // 深色模式下为白色
+        } else {
+            icon.style.filter = 'invert(0)'; // 日间模式下为黑色
+        }
+    });
+}
+
+// 初始化SVG颜色
+updateSvgColors(localStorage.getItem('theme') || 'light');

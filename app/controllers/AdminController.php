@@ -38,6 +38,7 @@ class AdminController {
         $Money_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'Money_link'")['value'];
         $Github_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'Github_link'")['value'];
         $Gitee_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'Gitee_link'")['value'];
+        $BiLiBiLi_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'BiLiBiLi_link'")['value'];
         $Coolapk_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'Coolapk_link'")['value'];
 
         // 包含主页视图文件，将$posts和$siteName变量传递给视图

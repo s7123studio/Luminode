@@ -9,15 +9,15 @@ $site_description = $_POST['site_description']; // 网站描述
 $avatar_link = $_POST['avatar_link']; // 头像链接
 $signature = $_POST['signature']; // 个性签名
 $link_1_name = $_POST['link_1_name']; // 链接1名称
-$link_1_url = $_POST['link_1_url']; // 链接1 URL
+$link_1 = $_POST['link_1']; // 链接1 URL
 $link_2_name = $_POST['link_2_name']; // 链接2名称
-$link_2_url = $_POST['link_2_url']; // 链接2 URL
+$link_2 = $_POST['link_2']; // 链接2 URL
 $link_3_name = $_POST['link_3_name']; // 链接3名称
-$link_3_url = $_POST['link_3_url']; // 链接3 URL
+$link_3 = $_POST['link_3']; // 链接3 URL
 $link_4_name = $_POST['link_4_name']; // 链接4名称
-$link_4_url = $_POST['link_4_url']; // 链接4 URL
+$link_4 = $_POST['link_4']; // 链接4 URL
 $link_5_name = $_POST['link_5_name']; // 链接5名称
-$link_5_url = $_POST['link_5_url']; // 链接5 URL
+$link_5 = $_POST['link_5']; // 链接5 URL
 $Copyright_date = $_POST['Copyright_date']; // 版权日期
 $Copyright_name = $_POST['Copyright_name']; // 版权名称
 $Copyright_Customize = $_POST['Copyright_Customize']; // 版权自定义信息
@@ -26,6 +26,7 @@ $Email_link = $_POST['Email_link']; // 邮箱链接
 $Money_link = $_POST['Money_link']; // 赞助链接
 $Github_link = $_POST['Github_link']; // Github链接
 $Gitee_link = $_POST['Gitee_link']; // Gitee链接
+$BiLiBiLi_link = $_POST['BiLiBiLi_link']; // bilibili链接
 $Coolapk_link = $_POST['Coolapk_link']; // Coolapk链接
 $newPassword = $_POST['new_password']; // 新密码
 // 获取当前用户信息
@@ -53,36 +54,16 @@ if (!empty($avatar_link)) {
 if (!empty($signature)) {
     $db->query("UPDATE settings SET value = ? WHERE `key` = 'signature'", [$signature]);
 }
-if (!empty($link_1_name)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1_name'", [$link_1_name]);
-}
-if (!empty($link_1_url)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1_url'", [$link_1_url]);
-}
-if (!empty($link_2_name)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_2_name'", [$link_2_name]);
-}
-if (!empty($link_2_url)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_2_url'", [$link_2_url]);
-}
-if (!empty($link_3_name)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_3_name'", [$link_3_name]);
-}
-if (!empty($link_3_url)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_3_url'", [$link_3_url]);
-}
-if (!empty($link_4_name)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_4_name'", [$link_4_name]);
-}
-if (!empty($link_4_url)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_4_url'", [$link_4_url]);
-}
-if (!empty($link_5_name)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_5_name'", [$link_5_name]);
-}
-if (!empty($link_5_url)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_5_url'", [$link_5_url]);
-}
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1_name'", [$link_1_name]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1'", [$link_1]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_2_name'", [$link_2_name]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_2'", [$link_2]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_3_name'", [$link_3_name]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_3'", [$link_3]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_4_name'", [$link_4_name]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_4'", [$link_4]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_5_name'", [$link_5_name]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'link_5'", [$link_5]);
 if (!empty($Copyright_date)) {
     $db->query("UPDATE settings SET value = ? WHERE `key` = 'Copyright_date'", [$Copyright_date]);
 }
@@ -92,24 +73,13 @@ if (!empty($Copyright_name)) {
 if (!empty($Copyright_Customize)) {
     $db->query("UPDATE settings SET value = ? WHERE `key` = 'Copyright_Customize'", [$Copyright_Customize]);
 }
-if (!empty($QQ_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'QQ_link'", [$QQ_link]);
-}
-if (!empty($Email_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'Email_link'", [$Email_link]);
-}
-if (!empty($Money_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'Money_link'", [$Money_link]);
-}
-if (!empty($Github_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'Github_link'", [$Github_link]);
-}
-if (!empty($Gitee_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'Gitee_link'", [$Gitee_link]);
-}
-if (!empty($Coolapk_link)) {
-    $db->query("UPDATE settings SET value = ? WHERE `key` = 'Coolapk_link'", [$Coolapk_link]);
-}
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'QQ_link'", [$QQ_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'Email_link'", [$Email_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'Money_link'", [$Money_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'Github_link'", [$Github_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'Gitee_link'", [$Gitee_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'BiLiBiLi_link'", [$BiLiBiLi_link]);
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'Coolapk_link'", [$Coolapk_link]);
 
 header("Location: /admin/"); // 重定向到管理员页面
 exit; // 结束脚本执行
