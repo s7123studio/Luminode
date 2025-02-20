@@ -29,6 +29,7 @@ $Gitee_link = $_POST['Gitee_link']; // Gitee链接
 $BiLiBiLi_link = $_POST['BiLiBiLi_link']; // bilibili链接
 $Coolapk_link = $_POST['Coolapk_link']; // Coolapk链接
 $newPassword = $_POST['new_password']; // 新密码
+$background_link = $_POST['background_link']; // 背景链接
 // 获取当前用户信息
 $user = $_SESSION['user'];
 // 更新密码，如果是空的就不更新
@@ -54,6 +55,7 @@ if (!empty($avatar_link)) {
 if (!empty($signature)) {
     $db->query("UPDATE settings SET value = ? WHERE `key` = 'signature'", [$signature]);
 }
+$db->query("UPDATE settings SET value = ? WHERE `key` = 'background_link'", [$background_link]);
 $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1_name'", [$link_1_name]);
 $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_1'", [$link_1]);
 $db->query("UPDATE settings SET value = ? WHERE `key` = 'link_2_name'", [$link_2_name]);

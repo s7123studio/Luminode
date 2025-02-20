@@ -16,6 +16,8 @@ class AdminController {
         $avatar_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'avatar_link'")['value'];
         // 查询个性签名
         $signature = $db->fetch("SELECT value FROM settings WHERE `key` = 'signature'")['value'];
+        // 查询背景图片链接
+        $background_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'background_link'")['value'];
         // 查询链接名和链接
         $link_1_name = $db->fetch("SELECT value FROM settings WHERE `key` = 'link_1_name'")['value'];
         $link_2_name = $db->fetch("SELECT value FROM settings WHERE `key` = 'link_2_name'")['value'];

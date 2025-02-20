@@ -1,6 +1,7 @@
 // 加载完成后隐藏加载动画
 window.addEventListener('load', () => {
     document.querySelector('.loader').style.opacity = '0';
+    document.querySelector('.custom-bg').style.opacity = '1'; 
     setTimeout(() => {
         document.querySelector('.loader').style.display = 'none';
     }, 500);
@@ -70,29 +71,13 @@ document.querySelectorAll('.link-item').forEach(button => {
     }
     animate();
 });
-// 生成动态粒子
-function createParticles() {
-    const container = document.createElement('div');
-    container.className = 'harmony-particles';
-    
-    for(let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.animationDelay = `${Math.random() * 2}s`;
-        container.appendChild(particle);
-    }
-    
-    document.querySelector('.background').appendChild(container);
-}
-createParticles();
 // 背景光效交互
 document.addEventListener('mousemove', (e) => {
     const x = e.clientX / window.innerWidth;
     const y = e.clientY / window.innerHeight;
     
     document.documentElement.style.setProperty('--harmony-glow', 
-        `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(90,139,255,0.3), transparent 60%)`);
+        `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(90, 140, 255, 0.60), transparent 60%)`);
 });
 function initAnimations() {
     try {

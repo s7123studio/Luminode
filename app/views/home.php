@@ -64,8 +64,7 @@
             <?php echo $BiLiBiLi_link?>
             <?php echo $Coolapk_link?>
         </div>
-    </main>
-            <!-- 版权信息 -->
+        <!-- 版权信息 -->
         <footer class="footer animate-fade-in fixed-footer" style="font-family: 'HarmonyOS', sans-serif;">
             <p class="ip-address">您的IP：<span id="ip-address">正在获取...</span></p>
             <p class="copyright">
@@ -76,13 +75,54 @@
                 <?php echo $Copyright_Customize; ?>
             </p>
         </footer>
+    </main>
 
+        
     <!-- 背景元素 -->
     <div class="background">
+        <div class="custom-bg"></div>
         <div class="gradient-circle pink"></div>
         <div class="gradient-circle blue"></div>
     </div>
-
     <script src="assets/js/main.js"></script>
+    <style>
+        /* 自定义背景层 */
+        .custom-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("<?php echo $background_link; ?>");
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: -2;
+        }
+        /* 添加背景模糊选项 */
+        .custom-bg {
+            filter: blur(10px);
+            transition: filter 0.4s ease;
+        }
+
+        /* 暗色遮罩 */
+        .custom-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            mix-blend-mode: multiply;
+        }
+
+        /* 亮色模式适配 */
+        [data-theme="light"] .custom-bg::after {
+            background: rgba(255,255,255,0.2);
+            mix-blend-mode: overlay;
+        }
+    </style>
 </body>
 </html>

@@ -38,6 +38,12 @@ body {
     }
 
 }
+
+/* 背景加载状态 */
+.custom-bg.loaded {
+    opacity: 1;
+}
+
 /* 日间模式下的SVG颜色 */
 .social-item img {
     filter: invert(0); /* 黑色 */
@@ -53,7 +59,7 @@ body {
     --text-color: #1A1A1A;
     --glass-bg: rgba(255,255,255,0.9); /* 毛玻璃效果 */
     --blur-intensity: 20px;
-    --harmony-glow: radial-gradient(circle at 50% 50%, rgba(90,139,255,0.3), transparent 60%);
+    --harmony-glow: radial-gradient(circle at 50% 50%, rgba(90,139,255,0.6), transparent 60%);
 	--dark-bg: #0D0D0D;
     --dark-surface: #1A1A1A;
     --dark-primary: #5A8BFF;
@@ -386,6 +392,7 @@ body {
     justify-content: center;
     gap: 1.5rem;
     margin: 2rem 0;
+    transition: all 0.3s ease;
 }
 
 .social-item {
@@ -411,13 +418,6 @@ body {
     height: 100%;
     z-index: 0;
     overflow: hidden;
-}
-/* 新增动态粒子背景 */
-.harmony-particles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
 }
 
 .gradient-circle {
@@ -446,9 +446,9 @@ body {
     100% { transform: translateY(-200px) scale(0.8); opacity: 0; }
 }
 .gradient-circle.pink {
-    width: 300px;
-    height: 300px;
-	background: radial-gradient(rgba(90,139,255,0.15), transparent 70%);
+    width: 250px;
+    height: 250px;
+	background: radial-gradient(rgba(26, 122, 255, 0.9), transparent 90%);
     animation: harmony-float 8s infinite ease-in-out;
     top: 20%;
     left: 20%;

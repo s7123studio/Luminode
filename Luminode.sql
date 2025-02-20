@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 1Panel-mysql-wy3J
--- 生成日期： 2025-02-19 17:18:36
+-- 生成日期： 2025-02-20 16:35:02
 -- 服务器版本： 8.2.0
 -- PHP 版本： 8.2.27
 
@@ -92,7 +92,8 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`) VALUES
 (30, 'avatar_link', '\\images\\Luminode.webp', '2025-02-17 23:33:26'),
 (31, 'site_favicon', '\\images\\Luminode.webp', '2025-02-17 23:53:53'),
 (32, 'Github_link', 'https://github.com/s7123studio', '2025-02-18 01:12:27'),
-(33, 'BiLiBiLi_link', 'https://space.bilibili.com/1723849342', '2025-02-19 20:41:51');
+(33, 'BiLiBiLi_link', 'https://space.bilibili.com/1723849342', '2025-02-19 20:41:51'),
+(34, 'background_link', '', '2025-02-20 21:35:01');
 
 -- --------------------------------------------------------
 
@@ -172,7 +173,7 @@ ALTER TABLE `posts`
 -- 使用表AUTO_INCREMENT `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- 使用表AUTO_INCREMENT `users`

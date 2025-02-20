@@ -61,7 +61,12 @@
                     <label class="input-label">个性签名:</label>
                 </div>
 
-                <div class="form-group"></div>
+                <div class="form-group">
+                    <input type="text" id="background_link" name="background_link" class="input-field"
+                           value="<?php echo $background_link; ?>" placeholder=" ">
+                    <label class="input-label">网站背景图:</label>
+                </div>
+
                 <h2 class="settings-title" style="font-size: 1.8rem;">链接</h2>
                 <div class="form-group"></div>
 
@@ -190,7 +195,7 @@
                            value="<?php echo $Coolapk_link; ?>" placeholder=" ">
                     <label class="input-label">酷安链接：</label>
                 </div>
-
+                
                 <div class="form-group" style="grid-column: span 2;">
                     <button type="submit" class="btn">保存所有设置</button>
                 </div>
