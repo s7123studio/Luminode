@@ -94,7 +94,7 @@ body {
 }
 .fixed-footer {
     position: fixed;
-    left: 0;
+    left: 41%;
     bottom: 0;
     padding: 10px;
 }
@@ -251,7 +251,6 @@ body {
     padding: 8px 16px;
     border-radius: 12px;
     backdrop-filter: blur(var(--blur-intensity));
-    display: inline-block;
 }
 .avatar {
     width: 100%;

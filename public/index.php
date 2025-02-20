@@ -20,7 +20,7 @@ $router->get('/', function() {
     (new HomeController())->index();
 });
 
-$router->get('/admin/', function() {
+$router->get('/admin', function() {
     // 使用AdminController 调用其 index 方法
     (new AdminController())->index();
 });

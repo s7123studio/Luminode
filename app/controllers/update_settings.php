@@ -83,5 +83,5 @@ $db->query("UPDATE settings SET value = ? WHERE `key` = 'Gitee_link'", [$Gitee_l
 $db->query("UPDATE settings SET value = ? WHERE `key` = 'BiLiBiLi_link'", [$BiLiBiLi_link]);
 $db->query("UPDATE settings SET value = ? WHERE `key` = 'Coolapk_link'", [$Coolapk_link]);
 
-header("Location: /admin/"); // 重定向到管理员页面
+header("Location: /admin"); // 重定向到管理员页面
 exit; // 结束脚本执行

@@ -66,8 +66,8 @@
         </div>
         <!-- 版权信息 -->
         <footer class="footer animate-fade-in fixed-footer" style="font-family: 'HarmonyOS', sans-serif;">
-            <p class="ip-address">您的IP：<span id="ip-address">正在获取...</span></p>
-            <p class="copyright">
+            <p align="center" class="ip-address">您的IP：<span id="ip-address">正在获取...</span></p>
+            <p align="center" class="copyright">
                 <script>
                     document.write(`Copyright © <?php echo $Copyright_date; ?> - ${new Date().getFullYear()} <?php echo $Copyright_name ?>`);
                 </script>
@@ -120,7 +120,7 @@
 
         /* 亮色模式适配 */
         [data-theme="light"] .custom-bg::after {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0);
             mix-blend-mode: overlay;
         }
     </style>
