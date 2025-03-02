@@ -43,7 +43,6 @@ class AdminController {
         $BiLiBiLi_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'BiLiBiLi_link'")['value'];
         $Coolapk_link = $db->fetch("SELECT value FROM settings WHERE `key` = 'Coolapk_link'")['value'];
 
-        // 包含主页视图文件，将$posts和$siteName变量传递给视图
         include '../app/views/admin/index.php';
     }
 }
