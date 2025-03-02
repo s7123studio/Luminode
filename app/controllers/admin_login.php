@@ -13,6 +13,6 @@ if (Auth::attempt($username, $password)) {
     exit;
 } else {
     // 登录失败，重定向回登录页面
-    header('Location: /admin/');
+    header('Location: /admin');
     exit;
     }
