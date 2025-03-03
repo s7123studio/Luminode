@@ -33,23 +33,6 @@ $router->post('/update_settings', function() {
     include '../app/controllers/update_settings.php';
 });
 
-$router->get('/gpu', function() {
-    (new GpuController())->index();
-});
-
-
-$router->get('/gpu/rank', function() {
-    (new GpuRankController())->index();
-});
-
-$router->post('/gpu/submit_score', function() {
-    include '../app/controllers/submit_score.php';
-});
-
-$router->get('/2024YR4', function() {
-    (new X2024YR4())->index();
-});
-
 $router->get('/guide', function() {
     // 使用HomeController 调用其 guide 方法
     (new HomeController())->guide();
