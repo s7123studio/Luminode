@@ -5,7 +5,7 @@ spl_autoload_register(function ($className) {
     $directories = [
         APP_ROOT . '/core/',
         APP_ROOT . '/app/controllers/',
-        APP_ROOT . '/app/models/'
+        APP_ROOT . '/app/models/',
     ];
 
     // 转换命名空间分隔符为目录分隔符

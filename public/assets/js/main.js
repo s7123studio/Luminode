@@ -1,28 +1,53 @@
 // 加载完成后隐藏加载动画
 window.addEventListener('load', () => {
-    document.querySelector('.loader').style.opacity = '0';
-    document.querySelector('.custom-bg').style.opacity = '1'; 
-    setTimeout(() => {
-        document.querySelector('.loader').style.display = 'none';
-    }, 500);
-
+    const loader = document.querySelector('.loader');
+    const bg = document.querySelector('.custom-bg');
+    
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
+    }
+    
+    if (bg) {
+        bg.style.opacity = '1';
+    }
+    
+    // 按需初始化其他功能
+    initLinkItems();
+    initThemeToggle();
     // 初始化动画观察者
-    initAnimations();
+    try {
+        initAnimations();
+    } catch (e) {
+        console.error('Animation init error:', e);
+    }
     // 检测是否为移动设备，并移除 .fixed-footer 类
-    if (isMobile) {
-        document.querySelector('footer').classList.remove('fixed-footer');
+    const footer = document.querySelector('footer');
+    if (footer && isMobile) {
+        footer.classList.remove('fixed-footer');
     }
 });
 
-// IP获取
-fetch('https://api.s7123.xyz/cityjson.php')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('ip-address').textContent = data.cip;
-    })
-    .catch(() => {
-        document.getElementById('ip-address').textContent = '获取失败';
-    });
+// 安全的IP获取
+function initIPDisplay() {
+    const ipElement = document.getElementById('ip-address');
+    if (!ipElement) return;
+
+    fetch('https://api.s7123.xyz/cityjson.php')
+        .then(response => response.json())
+        .then(data => {
+            if (ipElement && data.cip) {
+                ipElement.textContent = data.cip;
+            }
+        })
+        .catch(() => {
+            if (ipElement) {
+                ipElement.textContent = '获取失败';
+            }
+        });
+}
 
 // 交互动画
 function initAnimations() {
@@ -48,29 +73,40 @@ function initAnimations() {
     });
 }
 
-// 优化光效位置更新
-document.querySelectorAll('.link-item').forEach(button => {
-    const glow = button.querySelector('.harmony-glow');
-    let targetX = 50, currentX = 50;
-    let targetY = 50, currentY = 50;
+// 初始化链接项效果
+function initLinkItems() {
+    const linkItems = document.querySelectorAll('.link-item');
+    if (!linkItems.length) return;
 
-    button.addEventListener('mousemove', (e) => {
-        const rect = button.getBoundingClientRect();
-        targetX = ((e.clientX - rect.left) / rect.width) * 100;
-        targetY = ((e.clientY - rect.top) / rect.height) * 100;
+    linkItems.forEach(button => {
+        const glow = button.querySelector('.harmony-glow');
+        if (!glow) return;
+
+        let targetX = 50, currentX = 50;
+        let targetY = 50, currentY = 50;
+
+        // 确保按钮存在再添加事件监听
+        if (button) {
+            button.addEventListener('mousemove', (e) => {
+                const rect = button.getBoundingClientRect();
+                targetX = ((e.clientX - rect.left) / rect.width) * 100;
+                targetY = ((e.clientY - rect.top) / rect.height) * 100;
+            });
+
+            function animate() {
+                currentX += (targetX - currentX) * 0.15;
+                currentY += (targetY - currentY) * 0.15;
+                
+                if (glow) {
+                    glow.style.setProperty('--glow-x', `${currentX}%`);
+                    glow.style.setProperty('--glow-y', `${currentY}%`);
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
     });
-
-    function animate() {
-        currentX += (targetX - currentX) * 0.15;
-        currentY += (targetY - currentY) * 0.15;
-        
-        glow.style.setProperty('--glow-x', `${currentX}%`);
-        glow.style.setProperty('--glow-y', `${currentY}%`);
-        
-        requestAnimationFrame(animate);
-    }
-    animate();
-});
+}
 // 背景光效交互
 document.addEventListener('mousemove', (e) => {
     const x = e.clientX / window.innerWidth;
@@ -117,30 +153,33 @@ setTimeout(() => {
         element.classList.add('active');
     });
 }, 1000);
-// 模式切换功能
-const themeToggle = document.querySelector('.theme-toggle');
-const html = document.documentElement;
-
-// 初始化主题
-const savedTheme = localStorage.getItem('theme') || 'light';
-html.setAttribute('data-theme', savedTheme);
-
-themeToggle.addEventListener('click', () => {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+// 初始化主题切换功能
+function initThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
     
-    // 添加过渡类
-    html.classList.add('theme-changing');
-    setTimeout(() => html.classList.remove('theme-changing'), 400);
-    
-    // 更新主题
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    // 更新SVG颜色
-    updateSvgColors(newTheme);
-    // 鸿蒙特色动画
-    animateThemeChange(newTheme);
-});
+    if (!themeToggle) return;
+
+    // 初始化主题
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    // 确保元素存在再添加事件监听
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // 添加过渡类
+        html.classList.add('theme-changing');
+        setTimeout(() => html.classList.remove('theme-changing'), 400);
+        
+        // 更新主题
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateSvgColors(newTheme);
+        animateThemeChange(newTheme);
+    });
+}
 
 function animateThemeChange(theme) {
     const particles = document.createElement('div');

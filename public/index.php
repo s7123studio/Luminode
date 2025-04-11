@@ -1,6 +1,7 @@
 <?php
-// 定义应用根目录
+// 定义应用根目录和基础URL
 define('APP_ROOT', dirname(__DIR__));
+define('BASE_URL', '');
 
 // 注册自动加载
 require APP_ROOT . '/core/autoload.php';
@@ -40,6 +41,32 @@ $router->get('/guide', function() {
 $router->get('/post/{id}', function($id) {
     $controller = new HomeController();
     $controller->showPost($id);
+});
+
+// 演示功能路由
+$router->get('/demo', function() {
+    $controller = new DemoController();
+    $controller->showView();
+});
+
+$router->get('/demo/db', function() {
+    $controller = new DemoController();
+    $controller->showDbDemo();
+});
+
+$router->get('/demo/form', function() {
+    $controller = new DemoController();
+    $controller->showFormDemo();
+});
+
+$router->post('/demo/form', function() {
+    $controller = new DemoController();
+    $controller->showFormDemo();
+});
+
+$router->get('/demo/template', function() {
+    $controller = new DemoController();
+    $controller->showTemplateDemo();
 });
 
 // 运行路由

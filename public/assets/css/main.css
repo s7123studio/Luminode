@@ -53,6 +53,13 @@ body {
     filter: invert(1); /* 白色 */
 }
 :root {
+    --light-bg: #ffffff;
+    --dark-bg: #0D0D0D;
+    --text-color: #333333;
+    --text-color-dark: #f0f0f0;
+    --primary-color: #007bff;
+    --card-bg: #ffffff;
+    --card-bg-dark: #1a1a1a;
     --primary-color: #5A8BFF; /* 改为鸿蒙主题蓝 */
     --secondary-color: #4D4D4D;
     --background-color: #FAFAFA; /* 改为浅色背景 */
