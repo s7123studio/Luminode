@@ -1,5 +1,11 @@
 <?php
+// 检查用户是否登录
+if (!Auth::check()) {
+    echo "非法请求";
+    exit();
+}
 // 创建一个 Database 对象用于数据库操作
+
 $db = new Database();
 
 // 获取表单数据

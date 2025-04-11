@@ -204,20 +204,53 @@
 
         <div class="settings-card">
             <h2 class="settings-title" style="font-size: 1.8rem;">安全设置</h2>
-            <form action="/update_settings" method="post">
+            <form action="/update_settings" method="post" onsubmit="return validatePassword()">
                 <input type="hidden" name="username" value="<?php echo $_SESSION['user']; ?>">
                 
                 <div class="form-group">
-                    <input type="password" name="new_password" class="input-field" 
-                           placeholder=" " required>
-                    <label class="input-label">新密码</label>
+                   <input type="password" name="new_password" id="new_password" class="input-field" placeholder=" " required>
+                   <label class="input-label">新密码</label>
                 </div>
-                
-                <button type="submit" class="btn">更新密码</button>
+                <div class="form-group">
+                   <input type="password" name="confirm_password" id="confirm_password" class="input-field" placeholder=" " required>
+                   <label class="input-label">确认新密码</label>
+                </div>
+                  <div id="passwordError" class="error-message" style="display: none;">密码不一致</div>
+                  <button type="submit" class="btn">更新密码</button>
             </form>
         </div>
     <?php endif; ?>
 
     <script src="/assets/js/admin_script.js"></script>
+    <script>
+function validatePassword() {
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const errorDiv = document.getElementById('passwordError');
+
+    if (newPassword !== confirmPassword) {
+        errorDiv.style.display = 'block';
+        // 高亮错误输入框
+        document.getElementById('confirm_password').classList.add('error');
+        return false; // 阻止表单提交
+    }
+    
+    errorDiv.style.display = 'none';
+    document.getElementById('confirm_password').classList.remove('error');
+    return true; // 允许提交
+}
+</script>
+<style>
+.error-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+.input-field.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+}
+</style>
 </body>
 </html>

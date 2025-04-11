@@ -40,6 +40,6 @@ class Router {
         // 如果没有找到匹配的路由，返回404状态码
         http_response_code(404);
         // 输出"Page not found"表示页面未找到
-        echo "页面不存在";
+        include '../app/views/404.php';
     }
 }
