@@ -1,0 +1,2 @@
+[2025-10-19T15:05:34.572903+08:00] luminode.ERROR: Unknown named parameter $posts {"exception":"[object] (Error(code: 0): Unknown named parameter $posts at D:\\Project\\PHP\\Open_Luminode\\src\\Router.php:119)"} 
+[2025-10-19T15:06:08.291433+08:00] luminode.ERROR: Unknown named parameter $posts {"exception":"[object] (Error(code: 0): Unknown named parameter $posts at D:\\Project\\PHP\\Open_Luminode\\src\\Router.php:119)"} 

@@ -1,0 +1,6 @@
+<?php $this->section('content'); ?>
+
+    <!-- Your view content goes here -->
+    <h1>{{ view_name }} View</h1>
+
+<?php $this->endSection(); ?>

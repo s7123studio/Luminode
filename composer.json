@@ -1,0 +1,17 @@
+{
+    "name": "luminode/framework",
+    "description": "A modern, convenient and beginner-friendly PHP framework.",
+    "require": {
+        "php-di/php-di": "^7.0",
+        "symfony/console": "^6.4",
+        "filp/whoops": "^2.15",
+        "vlucas/phpdotenv": "^5.6",
+        "monolog/monolog": "^3.5"
+    },
+    "autoload": {
+                    "psr-4": {
+                        "Luminode\\Core\\": "src/",
+                        "App\\": "app/"
+                    }    }
+}
+

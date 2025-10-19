@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+// CLI 入口文件
+
+// 启动并获取 DI 容器
+// 注意：config/bootstrap.php 返回的是一个数组 [container, whoops]，我们只需要 container
+list($container, $whoops_unused) = require __DIR__ . '/config/bootstrap.php';
+
+use Symfony\Component\Console\Application;
+use Luminode\Core\Console\Commands\MakeControllerCommand;
+use Luminode\Core\Console\Commands\MakeModelCommand;
+use Luminode\Core\Console\Commands\RouteListCommand;
+use Luminode\Core\Console\Commands\MakeViewCommand;
+
+// 创建命令行应用实例
+$application = new Application('Open Luminode', '2.0.0');
+
+// --- 手动注册所有命令 ---
+// 使用 DI 容器来创建命令实例，以便自动注入依赖
+$application->add($container->get(MakeControllerCommand::class));
+$application->add($container->get(MakeModelCommand::class));
+$application->add($container->get(RouteListCommand::class));
+$application->add($container->get(MakeViewCommand::class));
+
+// 运行应用
+$application->run();

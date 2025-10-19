@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ base_class }};
+
+class {{ class }} extends {{ base_class_name }}
+{
+    //
+}

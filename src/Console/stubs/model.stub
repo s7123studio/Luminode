@@ -1,0 +1,21 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ base_class }};
+
+class {{ class }} extends {{ base_class_name }}
+{
+    /**
+     * The table associated with the model.
+     *
+     * By default, the table name is the plural snake_case version of the class name.
+     * e.g., UserProfile -> user_profiles
+     */
+    // protected string $table = 'custom_table_name';
+
+    /**
+     * The primary key for the model.
+     */
+    // protected string $primaryKey = 'id';
+}
