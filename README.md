@@ -18,48 +18,6 @@
 
 ## 🚀 快速开始
 👉[查看官方文档](https://Luminode.s7123.xyz)
-## 🛠️ 功能全景
-<table>
-    <thead>
-        <tr>
-            <th>模块</th>
-            <th>特性</th>
-            <th>示例代码片段</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>路由系统</strong></td>
-            <td>RESTful/动态路由/中间件链</td>
-            <td><code>Router::apiResource('posts')</code></td>
-        </tr>
-        <tr>
-            <td><strong>ORM</strong></td>
-            <td>关联查询/分页/事务处理</td>
-            <td><code>Post::with('comments')-&gt;paginate()</code></td>
-        </tr>
-        <tr>
-            <td><strong>安全</strong></td>
-            <td>CSRF令牌/密码哈希/请求验证</td>
-            <td><code>Validator::make($data, $rules)</code></td>
-        </tr>
-        <tr>
-            <td><strong>文件处理</strong></td>
-            <td>上传验证/云存储支持/图片处理</td>
-            <td><code>File::upload()-&gt;resize(300)</code></td>
-        </tr>
-        <tr>
-            <td><strong>模板引擎</strong></td>
-            <td>组件化布局/自动转义/多主题</td>
-            <td><code>&lt;x-alert type="success"&gt;</code></td>
-        </tr>
-        <tr>
-            <td><strong>任务队列</strong></td>
-            <td>Redis驱动/失败重试/进度追踪</td>
-            <td><code>ProcessPodcast::dispatch($podcast)</code></td>
-        </tr>
-    </tbody>
-</table>
 
 ## 🌟 为何选择Luminode？
 <ul>
