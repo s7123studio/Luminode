@@ -1,7 +1,13 @@
 <?php
 
 use Luminode\Core\Router;
+use Luminode\Core\Response;
+use Luminode\Core\Exceptions\CsrfTokenMismatchException;
+use Luminode\Core\Exceptions\RouteNotFoundException;
 use Luminode\Core\Exceptions\ViewNotFoundException;
+use Luminode\Core\Middleware\Authenticate;
+use Luminode\Core\Middleware\CsrfMiddleware;
+use Luminode\Core\Middleware\LogRequestMiddleware;
 use Whoops\Handler\PrettyPageHandler;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -18,7 +24,24 @@ if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'production') {
     ini_set('display_errors', 0);
     error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
-    $logHandler = function (Throwable $e) {
+    $logHandler = function (Throwable $e) use ($container) {
+        // 对于 RouteNotFoundException，我们不记录为严重错误，并显示404页面
+        if ($e instanceof RouteNotFoundException) {
+            if (!headers_sent()) {
+                $response = new Response('<h1>404 Not Found</h1><p>The page you requested could not be found.</p>', 404);
+                $response->send();
+            }
+            return;
+        }
+        
+        if ($e instanceof CsrfTokenMismatchException) {
+            if (!headers_sent()) {
+                $response = new Response('<h1>Page Expired</h1><p>Please go back, refresh the page, and try again.</p>', 419);
+                $response->send();
+            }
+            return;
+        }
+
         $log = new Logger('luminode');
         $logFile = dirname(__DIR__) . '/storage/logs/app.log';
         $handler = new StreamHandler($logFile, Logger::ERROR);
@@ -58,14 +81,40 @@ try {
     \Luminode\Core\ORM\BaseModel::setContainer($container);
     $router = $container->get(Router::class);
 
-    // 定义路由
-    $router->get('/', 'HomeController@index');
-    $router->get('/error-test', function() {
-        throw new ViewNotFoundException("View [a_non_existent_view] not found.");
-    });
+    // --- General Routes ---
+    $router->get('/', 'HomeController@index', [LogRequestMiddleware::class]);
+    $router->get('/test', "TestController@index");
 
-    $router->run();
+    // --- Auth Routes ---
+    $router->get('/register', 'AuthController@showRegistrationForm');
+    $router->post('/register', 'AuthController@register', [CsrfMiddleware::class]);
+    $router->get('/login', 'AuthController@showLoginForm');
+    $router->post('/login', 'AuthController@login', [CsrfMiddleware::class]);
+    $router->post('/logout', 'AuthController@logout', [CsrfMiddleware::class]);
+    $router->get('/profile', 'HomeController@profile', [Authenticate::class]);
 
+    // --- Demo Routes ---
+    $router->get('/error-test', function() { throw new ViewNotFoundException("View [a_non_existent_view] not found."); });
+    $router->get('/show-form', 'TestController@showCsrfForm');
+    $router->post('/handle-form', 'TestController@handleCsrfForm', [CsrfMiddleware::class]);
+
+
+    // Router->run() 现在返回一个 Response 对象
+    $response = $router->run();
+
+    // 发送响应到浏览器
+    if ($response instanceof Response) {
+        $response->send();
+    }
+
+} catch (CsrfTokenMismatchException $e) {
+    // 开发环境下，Whoops 会捕获它
+    // 生产环境下，set_exception_handler 已经处理了
+    throw $e;
+} catch (RouteNotFoundException $e) {
+    // 开发环境下，Whoops 会捕获它
+    // 生产环境下，set_exception_handler 已经处理了
+    throw $e;
 } catch (Throwable $e) {
     // 在开发环境中，为 Whoops 添加额外信息
     if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] !== 'production') {
@@ -88,7 +137,5 @@ try {
         }
     }
     // 最终将异常交给已注册的处理器 (Whoops 或我们的日志处理器)
-    // 注意：在生产环境中，此 throw 会被 set_exception_handler 捕获
-    // 在开发环境中，此 throw 会被 Whoops 捕获
     throw $e;
 }

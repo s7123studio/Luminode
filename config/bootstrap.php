@@ -1,8 +1,13 @@
 <?php
 
 use DI\ContainerBuilder;
+use Luminode\Core\Auth;
 use Luminode\Core\Database;
 use Luminode\Core\Template;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Whoops\Run as WhoopsRun;
 use Whoops\Handler\PrettyPageHandler;
 
@@ -24,6 +29,16 @@ $containerBuilder->addDefinitions([
     },
     Template::class => function () {
         return new Template(APP_ROOT . '/resources/views');
+    },
+    Auth::class => function (ContainerInterface $c) {
+        return new Auth($c->get(Database::class));
+    },
+    LoggerInterface::class => function () {
+        $log = new Logger('luminode');
+        $logFile = APP_ROOT . '/storage/logs/app.log';
+        $handler = new StreamHandler($logFile, Logger::DEBUG);
+        $log->pushHandler($handler);
+        return $log;
     },
 ]);
 $container = $containerBuilder->build();

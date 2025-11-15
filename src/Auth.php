@@ -4,60 +4,106 @@ namespace Luminode\Core;
 
 use Luminode\Core\Database;
 use Exception;
+use PDO;
 
-// 定义一个名为 Auth 的类，用于处理用户认证
-class Auth {
-    // 定义一个私有静态变量 $db，用于存储数据库连接实例
-    private static $db;
+class Auth
+{
+    protected Database $db;
 
-    // 静态方法 setDatabase，用于设置数据库连接实例
-    public static function setDatabase(Database $db) {
-        self::$db = $db; // 将传入的数据库实例赋值给静态变量 $db
+    public function __construct(Database $db)
+    {
+        $this->db = $db;
     }
 
-    // 静态方法 attempt，用于尝试用户登录
-    public static function attempt($username, $password) {
-        // 检查用户名或密码是否为空，如果为空则返回 false
+    /**
+     * Attempt to authenticate a user.
+     *
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function attempt(string $username, string $password): bool
+    {
         if (empty($username) || empty($password)) {
             return false;
         }
 
-        // 如果数据库连接实例未设置，则创建一个新的 Database 对象
-        if (!self::$db) {
-            self::$db = new Database();
-        }
-
-        // 使用 try-catch 结构来处理可能的数据库操作异常
         try {
-            // 从数据库中获取与用户名匹配的用户记录
-            $user = self::$db->fetch("SELECT * FROM users WHERE username = ?", [$username]);
+            $user = $this->db->query("SELECT * FROM users WHERE username = ?", [$username])->fetch(PDO::FETCH_ASSOC);
 
-            // 检查用户是否存在且密码是否正确
             if ($user && password_verify($password, $user['password'])) {
-                session_regenerate_id(true);
-
+                // Rehash password if needed
                 if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
                     $newHash = password_hash($password, PASSWORD_DEFAULT);
-                    self::$db->execute("UPDATE users SET password = ? WHERE id = ?", [$newHash, $user['id']]);
+                    $this->db->query("UPDATE users SET password = ? WHERE id = ?", [$newHash, $user['id']]);
                 }
-
-                $_SESSION['user'] = $user;
+                
+                $this->login($user);
                 return true;
             }
         } catch (Exception $e) {
-            // 记录错误或返回 false
+            // In a real app, you would log the exception
             return false;
         }
 
         return false;
     }
 
-    public static function check() {
-        return isset($_SESSION['user']);
+    /**
+     * Log the given user in.
+     *
+     * @param array $user
+     * @return void
+     */
+    public function login(array $user): void
+    {
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $user['id'];
     }
 
-    public static function logout() {
-        $_SESSION = array();
-        session_destroy();
+    /**
+     * Check if a user is authenticated.
+     *
+     * @return bool
+     */
+    public function check(): bool
+    {
+        return isset($_SESSION['user_id']);
+    }
+
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return array|null
+     */
+    public function user(): ?array
+    {
+        if (!$this->check()) {
+            return null;
+        }
+        
+        // Fetch fresh user data from DB to avoid stale session data
+        return $this->db->query("SELECT * FROM users WHERE id = ?", [$this->id()])->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the ID of the currently authenticated user.
+     *
+     * @return int|null
+     */
+    public function id(): ?int
+    {
+        return $_SESSION['user_id'] ?? null;
+    }
+
+    /**
+     * Log the user out.
+     *
+     * @return void
+     */
+    public function logout(): void
+    {
+        unset($_SESSION['user_id']);
+        session_regenerate_id(true);
     }
 }

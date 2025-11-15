@@ -4,7 +4,10 @@ namespace Luminode\Core\ORM;
 
 use DI\Container;
 use Luminode\Core\Database;
+use Luminode\Core\ORM\Relations\BelongsTo;
+use Luminode\Core\ORM\Relations\HasMany;
 use PDO;
+use Luminode\Core\ORM\QueryBuilder;
 
 abstract class BaseModel
 {
@@ -14,6 +17,19 @@ abstract class BaseModel
     protected string $table;
     protected string $primaryKey = 'id';
     protected array $attributes = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     * @var array
+     */
+    protected array $fillable = [];
+
+    /**
+     * The loaded relationships for the model.
+     * @var array
+     */
+    protected array $relations = [];
+
     protected bool $exists = false;
 
     public function __construct(array $attributes = [])
@@ -34,9 +50,16 @@ abstract class BaseModel
     public function fill(array $attributes): self
     {
         foreach ($attributes as $key => $value) {
-            $this->setAttribute($key, $value);
+            if ($this->isFillable($key)) {
+                $this->setAttribute($key, $value);
+            }
         }
         return $this;
+    }
+
+    protected function isFillable(string $key): bool
+    {
+        return in_array($key, $this->fillable);
     }
 
     protected function getTable(): string
@@ -46,6 +69,39 @@ abstract class BaseModel
         }
         $className = substr(strrchr(get_class($this), "\\"), 1);
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $className)) . 's';
+    }
+
+    public static function query(): QueryBuilder
+    {
+        if (self::$container === null) {
+            throw new \Exception('BaseModel not initialized. Please call setContainer() in your bootstrap file.');
+        }
+        $model = new static(); // Instantiate to get table name and db instance
+        return new QueryBuilder(
+            self::$container->get(Database::class),
+            $model->getTable(),
+            static::class // Pass the current model class name
+        );
+    }
+
+    public static function where(string $column, string $operator, $value): QueryBuilder
+    {
+        return static::query()->where($column, $operator, $value);
+    }
+
+    public static function orderBy(string $column, string $direction = 'ASC'): QueryBuilder
+    {
+        return static::query()->orderBy($column, $direction);
+    }
+
+    public static function limit(int $limit): QueryBuilder
+    {
+        return static::query()->limit($limit);
+    }
+
+    public static function offset(int $offset): QueryBuilder
+    {
+        return static::query()->offset($offset);
     }
 
     public static function find($id)
@@ -58,7 +114,7 @@ abstract class BaseModel
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            $model->fill($data);
+            $model->forceFill($data);
             $model->exists = true;
             return $model;
         }
@@ -68,17 +124,61 @@ abstract class BaseModel
 
     public static function all(): array
     {
-        $model = new static();
-        $table = $model->getTable();
+        return static::query()->getModels();
+    }
 
-        $stmt = $model->db->query("SELECT * FROM {$table}");
-        $results = [];
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $data) {
-            $instance = new static($data);
-            $instance->exists = true;
-            $results[] = $instance;
+    public static function get(): array
+    {
+        return static::query()->getModels();
+    }
+
+    public static function first()
+    {
+        return static::query()->firstModel();
+    }
+
+    /**
+     * Create a collection of models from a plain array.
+     *
+     * @param array $items
+     * @return array
+     */
+    public static function hydrate(array $items): array
+    {
+        $models = [];
+        foreach ($items as $item) {
+            $model = new static();
+            $model->forceFill($item);
+            $model->exists = true;
+            $models[] = $model;
         }
-        return $results;
+        return $models;
+    }
+
+    protected function hasMany(string $related, string $foreignKey = null, string $localKey = null): HasMany
+    {
+        $relatedInstance = new $related();
+        $foreignKey = $foreignKey ?: strtolower(substr(strrchr(get_class($this), "\\"), 1)) . '_' . $this->primaryKey;
+        $localKey = $localKey ?: $this->primaryKey;
+
+        return new HasMany($relatedInstance::query(), $this, $foreignKey, $localKey);
+    }
+
+    protected function belongsTo(string $related, string $foreignKey = null, string $ownerKey = null): BelongsTo
+    {
+        $relatedInstance = new $related();
+        $foreignKey = $foreignKey ?: strtolower(substr(strrchr($related, "\\"), 1)) . '_' . $relatedInstance->primaryKey;
+        $ownerKey = $ownerKey ?: $relatedInstance->primaryKey;
+
+        return new BelongsTo($relatedInstance::query(), $this, $foreignKey, $ownerKey);
+    }
+
+    protected function forceFill(array $attributes): self
+    {
+        foreach ($attributes as $key => $value) {
+            $this->setAttribute($key, $value);
+        }
+        return $this;
     }
 
     public function save(): bool
@@ -126,14 +226,42 @@ abstract class BaseModel
         return $this->attributes[$key] ?? null;
     }
 
+    public function toArray(): array
+    {
+        return $this->attributes;
+    }
+
     public function setAttribute(string $key, $value): void
     {
         $this->attributes[$key] = $value;
     }
 
+    public function setRelation(string $key, $value): void
+    {
+        $this->relations[$key] = $value;
+    }
+
     public function __get(string $key)
     {
-        return $this->getAttribute($key);
+        if (array_key_exists($key, $this->attributes)) {
+            return $this->getAttribute($key);
+        }
+
+        if (array_key_exists($key, $this->relations)) {
+            return $this->relations[$key];
+        }
+
+        if (method_exists($this, $key)) {
+            $relation = $this->$key();
+
+            if ($relation instanceof HasMany || $relation instanceof BelongsTo) {
+                $results = $relation->getResults();
+                $this->relations[$key] = $results;
+                return $results;
+            }
+        }
+
+        return null;
     }
 
     public function __set(string $key, $value): void

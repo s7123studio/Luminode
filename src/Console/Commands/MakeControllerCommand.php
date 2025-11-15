@@ -5,6 +5,7 @@ namespace Luminode\Core\Console\Commands;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MakeControllerCommand extends Command
@@ -15,11 +16,14 @@ class MakeControllerCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('name', InputArgument::REQUIRED, 'The name of the controller');
+        $this->addOption('resource', 'r', InputOption::VALUE_NONE, 'Generate a resourceful controller class');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
+        $isResource = $input->getOption('resource');
+
         $controllerPath = APP_ROOT . '/app/Controllers/';
         $filePath = $controllerPath . $name . '.php';
 
@@ -32,7 +36,9 @@ class MakeControllerCommand extends Command
             mkdir($controllerPath, 0755, true);
         }
 
-        $stubPath = APP_ROOT . '/src/Console/stubs/controller.stub';
+        $stubFileName = $isResource ? 'controller.resource.stub' : 'controller.stub';
+        $stubPath = APP_ROOT . '/src/Console/stubs/' . $stubFileName;
+
         if (!file_exists($stubPath)) {
             $output->writeln("<error>Controller stub not found at: {$stubPath}</error>");
             return Command::FAILURE;

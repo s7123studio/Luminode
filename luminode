@@ -22,6 +22,5 @@ $application->add($container->get(MakeControllerCommand::class));
 $application->add($container->get(MakeModelCommand::class));
 $application->add($container->get(RouteListCommand::class));
 $application->add($container->get(MakeViewCommand::class));
-
 // 运行应用
 $application->run();

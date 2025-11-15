@@ -1,2 +1,40 @@
 [2025-10-19T15:05:34.572903+08:00] luminode.ERROR: Unknown named parameter $posts {"exception":"[object] (Error(code: 0): Unknown named parameter $posts at D:\\Project\\PHP\\Open_Luminode\\src\\Router.php:119)"} 
 [2025-10-19T15:06:08.291433+08:00] luminode.ERROR: Unknown named parameter $posts {"exception":"[object] (Error(code: 0): Unknown named parameter $posts at D:\\Project\\PHP\\Open_Luminode\\src\\Router.php:119)"} 
+[2025-10-19T18:53:09.047570+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-10-19T18:53:09.887593+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-10-19T18:53:18.986851+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-10-19T18:53:35.481424+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-10-19T18:53:36.126053+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-10-19T18:53:54.674779+08:00] luminode.ERROR: Call to undefined function App\Controllers\view() {"exception":"[object] (Error(code: 0): Call to undefined function App\\Controllers\\view() at D:\\Project\\PHP\\Open_Luminode\\app\\Controllers\\TestController.php:11)"} 
+[2025-11-15T19:50:04.514874+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:50:07.787310+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:50:16.705749+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:50:24.921090+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:06.550357+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:47.937941+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:48.690314+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:49.220856+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:49.670688+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:50.138118+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:52.947261+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:53:53.376565+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:54:02.339891+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:02.449577+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:03.546436+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:04.225738+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:25.466921+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:26.101062+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:35.579983+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:35.592208+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:36.679490+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:36.691748+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:37.255130+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:37.267587+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:37.789027+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:37.799111+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:38.269765+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:38.278313+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:38.819281+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:38.829237+08:00] luminode.INFO: Response sent: 200 [] []
+[2025-11-15T19:55:39.420323+08:00] luminode.INFO: Request received: GET / [] []
+[2025-11-15T19:55:39.429226+08:00] luminode.INFO: Response sent: 200 [] []
