@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt)
 [![Documentation](https://img.shields.io/badge/Docs-Luminode-brightgreen)](https://Luminode.s7123.xyz)
 
-**光速启航的PHP轻量级框架** • [English Version](README_EN.md)
+**光速启航的PHP轻量级框架**
 
 ---
 
