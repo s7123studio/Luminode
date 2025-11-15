@@ -43,69 +43,6 @@
 
 ## 🚀 快速开始
 
-### 1. 克隆仓库
-
-```bash
-git clone https://github.com/s7123studio/Luminode.git my-luminode-app
-cd my-luminode-app
-```
-
-### 2. 安装依赖
-
-```bash
-composer install
-```
-
-### 3. 配置环境
-
-复制 `.env.example` 为 `.env`，并根据您的环境修改数据库连接信息：
-
-```bash
-cp .env.example .env
-```
-
-编辑 `.env` 文件：
-```dotenv
-# .env
-APP_ENV=development
-DB_HOST=localhost
-DB_PORT=3306
-DB_DATABASE=luminode_db
-DB_USERNAME=root
-DB_PASSWORD=your_password
-```
-
-### 4. Web服务器配置
-
-将您的Web服务器（如 Nginx 或 Apache）的根目录指向项目的 `public` 文件夹。
-
-**Nginx 示例配置:**
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-    root /path/to/your-project/public;
-
-    index index.php;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        include fastcgi_params;
-        fastcgi_pass unix:/var/run/php/php8.x-fpm.sock; # 根据您的环境修改
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    }
-}
-```
-
-### 5. 访问应用
-
-完成配置后，在浏览器中访问您的域名，即可看到光枢框架的欢迎页面。
-
-## 📚 详细文档
-
 访问我们的 [官方文档](https://Luminode.s7123.xyz) 获取更深入的指南、API参考和高级用法。
 
 ## 🤝 参与贡献
