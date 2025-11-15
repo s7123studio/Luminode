@@ -104,6 +104,13 @@ abstract class BaseModel
         return static::query()->offset($offset);
     }
 
+    public static function create(array $attributes = [])
+    {
+        $model = new static($attributes);
+        $model->save();
+        return $model;
+    }
+
     public static function find($id)
     {
         $model = new static();
