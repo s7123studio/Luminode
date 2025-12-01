@@ -81,23 +81,13 @@ try {
     \Luminode\Core\ORM\BaseModel::setContainer($container);
     $router = $container->get(Router::class);
 
-    // --- General Routes ---
-    $router->get('/', 'HomeController@index', [LogRequestMiddleware::class]);
-    $router->get('/test', "TestController@index");
+    // Load global helpers manually (fallback if composer autoload isn't dumped)
+    if (file_exists(dirname(__DIR__) . '/src/helpers.php')) {
+        require_once dirname(__DIR__) . '/src/helpers.php';
+    }
 
-    // --- Auth Routes ---
-    $router->get('/register', 'AuthController@showRegistrationForm');
-    $router->post('/register', 'AuthController@register', [CsrfMiddleware::class]);
-    $router->get('/login', 'AuthController@showLoginForm');
-    $router->post('/login', 'AuthController@login', [CsrfMiddleware::class]);
-    $router->post('/logout', 'AuthController@logout', [CsrfMiddleware::class]);
-    $router->get('/profile', 'HomeController@profile', [Authenticate::class]);
-
-    // --- Demo Routes ---
-    $router->get('/error-test', function() { throw new ViewNotFoundException("View [a_non_existent_view] not found."); });
-    $router->get('/show-form', 'TestController@showCsrfForm');
-    $router->post('/handle-form', 'TestController@handleCsrfForm', [CsrfMiddleware::class]);
-
+    // --- Load Routes ---
+    require dirname(__DIR__) . '/routes/web.php';
 
     // Router->run() 现在返回一个 Response 对象
     $response = $router->run();

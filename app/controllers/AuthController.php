@@ -35,12 +35,12 @@ class AuthController extends Controller
         ];
 
         if (!$this->validate($data, $rules)) {
-            // In a real app, you'd redirect back with errors.
-            // For this demo, we'll just show a simple error.
+            // 在实际应用中，您通常会带着错误信息重定向回去。
+            // 在此演示中，我们仅显示简单的 JSON 错误。
             return $this->json(['success' => false, 'errors' => $this->validationErrors()]);
         }
 
-        // In a real app, you should also check if username/email is unique.
+        // 在实际应用中，您还应该检查用户名/邮箱是否唯一。
         $user = new User();
         $user->fill([
             'username' => $data['username'],
@@ -49,7 +49,7 @@ class AuthController extends Controller
         ]);
         $user->save();
 
-        // Log the user in
+        // 用户注册后自动登录
         $this->auth->login($user->toArray());
 
         return $this->redirect('/profile');
@@ -76,8 +76,8 @@ class AuthController extends Controller
             return $this->redirect('/profile');
         }
 
-        // In a real app, you'd redirect back with an error message.
-        return $this->json(['success' => false, 'message' => 'Invalid credentials']);
+        // 在实际应用中，您通常会带着错误信息重定向回去。
+        return $this->json(['success' => false, 'message' => '用户名或密码无效']);
     }
 
     public function logout(): Response

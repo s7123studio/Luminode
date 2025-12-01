@@ -1,22 +1,14 @@
 <?php $this->section('content')?>
 
-
-
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
-        <title>Test Page</title>
+        <meta charset="UTF-8">
+        <title>测试页面</title>
     </head>
     <body>
-        <h1>Welcome to Test Page</h1>
-
-        </body>
-
-
+        <h1>欢迎来到测试页面</h1>
+    </body>
 </html>
 
-
-
-
-<?php $this->endsection()?>
+<?php $this->endSection()?>

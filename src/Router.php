@@ -110,7 +110,7 @@ class Router
         $routeData = $this->findRoute($method, $path);
 
         if ($routeData === null) {
-            throw new RouteNotFoundException("No route found for {$method} {$path}");
+            throw new RouteNotFoundException("未找到路由：{$method} {$path}");
         }
 
         $finalCallback = function (Container $container) use ($routeData) {
@@ -170,27 +170,48 @@ class Router
 
     private function executeCallback($callback, array $params = []): Response
     {
+        $result = null;
+
         if (is_string($callback) && strpos($callback, '@') !== false) {
             list($controllerName, $methodName) = explode('@', $callback, 2);
             $controllerClass = "App\\Controllers\\" . $controllerName;
 
             if (!class_exists($controllerClass)) {
-                throw new Exception("Controller class {$controllerClass} not found.");
+                throw new Exception("未找到控制器类：{$controllerClass}");
             }
 
             $controllerInstance = $this->container->get($controllerClass);
 
             if (!method_exists($controllerInstance, $methodName)) {
-                throw new Exception("Method {$methodName} not found in controller {$controllerClass}.");
+                throw new Exception("控制器 {$controllerClass} 中未找到方法：{$methodName}");
             }
 
-            return call_user_func_array([$controllerInstance, $methodName], $params);
+            $result = call_user_func_array([$controllerInstance, $methodName], $params);
 
         } elseif (is_callable($callback)) {
-            return call_user_func_array($callback, $params);
+            $result = call_user_func_array($callback, $params);
         } else {
-            throw new Exception("Invalid route callback.");
+            throw new Exception("无效的路由回调函数。");
         }
+
+        // Auto-wrap response
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        if (is_string($result) || is_numeric($result)) {
+            return new Response((string)$result);
+        }
+
+        if (is_array($result) || $result instanceof \JsonSerializable) {
+            return new Response(json_encode($result), 200, ['Content-Type' => 'application/json']);
+        }
+        
+        if (is_null($result)) {
+             return new Response('');
+        }
+
+        throw new Exception("路由回调返回了无效类型。期望字符串、数组或 Response 对象。");
     }
 
     public function getRoutes(): array

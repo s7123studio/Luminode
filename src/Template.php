@@ -8,7 +8,7 @@ use Luminode\Core\Exceptions\ViewNotFoundException;
 class Template
 {
     protected $viewsPath;
-    protected $layout = 'layout';
+    protected $layout = null;
     protected $sections = [];
     protected $currentSection;
 
@@ -19,16 +19,29 @@ class Template
 
     public function render($view, $data = [])
     {
+        // 每次渲染重置布局和区块，避免实例复用时污染
+        $this->layout = null;
+        $this->sections = [];
+        $this->currentSection = null;
+
+        // 提取视图数据
         extract($this->escape($data));
+
+        // 开始捕获视图输出
         ob_start();
         include $this->resolvePath($view);
         $content = ob_get_clean();
 
+        // 如果视图中定义了布局 (通过 $this->extend('layoutName'))
         if ($this->layout) {
-            $layout = $this->resolvePath($this->layout);
-            if (file_exists($layout)) {
+            // 将捕获的视图内容存储为 'content' 区块
+            $this->sections['content'] = $content;
+
+            // 渲染布局
+            $layoutPath = $this->resolvePath($this->layout);
+            if (file_exists($layoutPath)) {
                 ob_start();
-                include $layout;
+                include $layoutPath;
                 return ob_get_clean();
             }
         }
@@ -49,13 +62,16 @@ class Template
 
     public function endSection()
     {
+        if (is_null($this->currentSection)) {
+            throw new RuntimeException("无法结束区块：未开始任何区块。");
+        }
         $this->sections[$this->currentSection] = ob_get_clean();
         $this->currentSection = null;
     }
 
-    public function yield($name)
+    public function yieldContent($name, $default = '')
     {
-        echo $this->sections[$name] ?? '';
+        echo $this->sections[$name] ?? $default;
     }
 
     public function escape($data)
@@ -75,7 +91,7 @@ class Template
     {
         $path = $this->viewsPath . str_replace('.', '/', $view) . '.php';
         if (!file_exists($path)) {
-            throw new ViewNotFoundException("View [{$view}] not found at path: {$path}");
+            throw new ViewNotFoundException("未找到视图 [{$view}]，路径：{$path}");
         }
         return $path;
     }

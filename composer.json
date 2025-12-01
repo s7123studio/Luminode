@@ -10,9 +10,13 @@
         "monolog/monolog": "^3.5"
     },
     "autoload": {
-                    "psr-4": {
-                        "Luminode\\Core\\": "src/",
-                        "App\\": "app/"
-                    }    }
+        "psr-4": {
+            "Luminode\\Core\\": "src/",
+            "App\\": "app/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
 }
 
