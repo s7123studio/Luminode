@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-03-09 22:43:28
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:18:38
+ */
 
 namespace Luminode\Core;
 
@@ -16,11 +22,11 @@ class Auth
     }
 
     /**
-     * Attempt to authenticate a user.
+     * 尝试验证用户身份
      *
-     * @param string $username
-     * @param string $password
-     * @return bool
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @return bool 是否验证成功
      */
     public function attempt(string $username, string $password): bool
     {
@@ -50,9 +56,9 @@ class Auth
     }
 
     /**
-     * Log the given user in.
+     * 登录指定用户
      *
-     * @param array $user
+     * @param array $user 用户数据
      * @return void
      */
     public function login(array $user): void
@@ -62,9 +68,9 @@ class Auth
     }
 
     /**
-     * Check if a user is authenticated.
+     * 检查用户是否已认证
      *
-     * @return bool
+     * @return bool 是否已认证
      */
     public function check(): bool
     {
@@ -72,9 +78,9 @@ class Auth
     }
 
     /**
-     * Get the currently authenticated user.
+     * 获取当前已认证的用户
      *
-     * @return array|null
+     * @return array|null 用户数据，未认证则返回null
      */
     public function user(): ?array
     {
@@ -87,9 +93,9 @@ class Auth
     }
 
     /**
-     * Get the ID of the currently authenticated user.
+     * 获取当前已认证用户的ID
      *
-     * @return int|null
+     * @return int|null 用户ID，未认证则返回null
      */
     public function id(): ?int
     {
@@ -97,7 +103,7 @@ class Auth
     }
 
     /**
-     * Log the user out.
+     * 登出当前用户
      *
      * @return void
      */

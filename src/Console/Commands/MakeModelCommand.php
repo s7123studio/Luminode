@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-10-18 19:25:08
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:15:12
+ */
 
 namespace Luminode\Core\Console\Commands;
 
@@ -55,13 +61,12 @@ class MakeModelCommand extends Command
 
         $output->writeln("<info>Model '{$name}' created successfully.</info>");
 
-        // Call make:controller command if --controller option is present
         if ($input->getOption('controller')) {
             $controllerName = $name . 'Controller';
             $controllerCommand = $this->getApplication()->find('make:controller');
             $controllerInput = new ArrayInput([
                 'name' => $controllerName,
-                '--resource' => true, // Always make it a resource controller
+                '--resource' => true, //  
             ]);
             $controllerCommand->run($controllerInput, $output);
         }

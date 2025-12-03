@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-03-09 22:43:28
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:18:10
+ */
 
 namespace Luminode\Core\ORM;
 
@@ -19,13 +25,13 @@ abstract class BaseModel
     protected array $attributes = [];
     
     /**
-     * The attributes that are mass assignable.
+     * 可批量赋值的属性
      * @var array
      */
     protected array $fillable = [];
 
     /**
-     * The loaded relationships for the model.
+     * 模型已加载的关联关系
      * @var array
      */
     protected array $relations = [];
@@ -145,10 +151,10 @@ abstract class BaseModel
     }
 
     /**
-     * Create a collection of models from a plain array.
+     * 从普通数组创建模型集合
      *
-     * @param array $items
-     * @return array
+     * @param array $items 数据数组
+     * @return array 模型数组
      */
     public static function hydrate(array $items): array
     {

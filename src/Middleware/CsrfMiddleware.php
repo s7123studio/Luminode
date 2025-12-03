@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-03-09 22:43:28
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:17:35
+ */
 
 namespace Luminode\Core\Middleware;
 
@@ -10,11 +16,11 @@ use Luminode\Core\Response;
 class CsrfMiddleware implements MiddlewareInterface
 {
     /**
-     * Handle an incoming request.
+     * 处理传入的请求
      *
-     * @param Container $container
-     * @param Closure $next
-     * @return Response
+     * @param Container $container 依赖注入容器
+     * @param Closure $next 代表下一个中间件层的闭包
+     * @return Response HTTP 响应
      * @throws CsrfTokenMismatchException
      */
     public function handle(Container $container, Closure $next): Response
@@ -27,9 +33,9 @@ class CsrfMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Determine if the request is a reading request.
+     * 判断请求是否为读取请求
      *
-     * @return bool
+     * @return bool 是否为读取请求
      */
     protected function isReadingRequest(): bool
     {
@@ -37,9 +43,9 @@ class CsrfMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Determine if the session and request CSRF tokens match.
+     * 判断会话和请求的 CSRF 令牌是否匹配
      *
-     * @return bool
+     * @return bool 是否匹配
      */
     protected function tokensMatch(): bool
     {
@@ -59,9 +65,9 @@ class CsrfMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Generate and return a CSRF token.
+     * 生成并返回 CSRF 令牌
      *
-     * @return string
+     * @return string CSRF 令牌
      * @throws \Exception
      */
     public static function generateToken(): string

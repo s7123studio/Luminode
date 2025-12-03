@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-11-15 19:46:15
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:17:13
+ */
 
 namespace Luminode\Core\Middleware;
 
@@ -17,11 +23,11 @@ class Authenticate implements MiddlewareInterface
     }
 
     /**
-     * Handle an incoming request.
+     * 处理传入的请求
      *
-     * @param Container $container
-     * @param Closure $next
-     * @return Response
+     * @param Container $container 依赖注入容器
+     * @param Closure $next 代表下一个中间件层的闭包
+     * @return Response HTTP 响应
      */
     public function handle(Container $container, Closure $next): Response
     {

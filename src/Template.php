@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-04-11 18:30:29
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:29:27
+ */
 
 namespace Luminode\Core;
 

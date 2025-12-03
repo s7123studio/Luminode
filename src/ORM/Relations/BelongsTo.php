@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-11-15 19:13:51
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:17:58
+ */
 
 namespace Luminode\Core\ORM\Relations;
 
@@ -13,12 +19,12 @@ class BelongsTo
     protected string $ownerKey;
 
     /**
-     * Create a new belongs-to relationship instance.
+     * 创建一个新的属于关系实例
      *
-     * @param QueryBuilder $query
-     * @param BaseModel $child
-     * @param string $foreignKey
-     * @param string $ownerKey
+     * @param QueryBuilder $query 查询构建器实例
+     * @param BaseModel $child 子模型实例
+     * @param string $foreignKey 外键名
+     * @param string $ownerKey 所有者键名
      */
     public function __construct(QueryBuilder $query, BaseModel $child, string $foreignKey, string $ownerKey)
     {
@@ -29,9 +35,9 @@ class BelongsTo
     }
 
     /**
-     * Get the results of the relationship.
+     * 获取关系的结果
      *
-     * @return BaseModel|null
+     * @return BaseModel|null 关联的模型实例，不存在则返回null
      */
     public function getResults(): ?BaseModel
     {

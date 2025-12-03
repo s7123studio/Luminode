@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-03-09 22:43:28
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:20:42
+ */
 
 namespace Luminode\Core;
 
@@ -7,8 +13,8 @@ use PDOException;
 use RuntimeException;
 
 /**
- * Class Database
- * A simple PDO wrapper. Its lifecycle is managed by the DI container.
+ * Database 类
+ * 一个简单的 PDO 包装器，其生命周期由依赖注入容器管理
  */
 class Database {
     public $pdo;

@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: 7123
+ * @Date: 2025-12-01 13:01:37
+ * @LastEditors: 7123
+ * @LastEditTime: 2025-12-03 19:21:12
+ */
 
 use Luminode\Core\Response;
 use Luminode\Core\Template;
