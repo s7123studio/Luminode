@@ -30,8 +30,11 @@ $dotenv->load();
 // --- 3. 创建并配置依赖注入容器 (DI Container) ---
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions([
-    Database::class => function () {
-        return new Database();
+    \Luminode\Core\Config::class => function () {
+        return new \Luminode\Core\Config(APP_ROOT . '/config');
+    },
+    Database::class => function (ContainerInterface $c) {
+        return new Database($c->get(\Luminode\Core\Config::class));
     },
     Template::class => function () {
         return new Template(APP_ROOT . '/resources/views');

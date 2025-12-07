@@ -1,31 +1,34 @@
 <?php
-/*
- * @Author: 7123
- * @Date: 2025-10-19 01:34:37
- * @LastEditors: 7123
- * @LastEditTime: 2025-12-03 19:15:59
- */
 
 namespace Luminode\Core\Console\Commands;
 
-use Symfony\Component\Console\Command\Command;
+use Luminode\Core\Console\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MakeViewCommand extends Command
+class MakeViewCommand extends BaseCommand
 {
     protected static $defaultName = 'make:view';
-    protected static $defaultDescription = 'Create a new view file';
+    protected static $defaultDescription = '创建一个新的视图文件';
 
     protected function configure(): void
     {
-        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the view (e.g., posts.show)');
+        $this->addArgument('name', InputArgument::OPTIONAL, '视图名称 (例如：posts.show)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function handle(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
+
+        if (!$name) {
+            $name = $this->ask('请输入视图名称 (支持点语法，例如：users.index)');
+            if (!$name) {
+                $this->error('必须提供视图名称。');
+                return self::FAILURE;
+            }
+        }
+
         $viewPath = APP_ROOT . '/resources/views/';
         
         // 将点语法转换为目录分隔符
@@ -33,11 +36,18 @@ class MakeViewCommand extends Command
         $viewName = array_pop($pathParts);
         $directory = $viewPath . implode(DIRECTORY_SEPARATOR, $pathParts);
 
-        $filePath = $directory . DIRECTORY_SEPARATOR . $viewName . '.php';
+        // 确保目录以分隔符结尾（如果不是空目录）
+        if (!empty($pathParts)) {
+            $directory .= DIRECTORY_SEPARATOR;
+        }
+
+        $filePath = $directory . $viewName . '.php';
 
         if (file_exists($filePath)) {
-            $output->writeln("<error>View '{$name}' already exists!</error>");
-            return Command::FAILURE;
+            if (!$this->confirm("视图 '{$name}' 已存在。是否覆盖？", false)) {
+                $this->info('操作已取消。');
+                return self::SUCCESS;
+            }
         }
 
         if (!is_dir($directory)) {
@@ -46,8 +56,8 @@ class MakeViewCommand extends Command
 
         $stubPath = APP_ROOT . '/src/Console/stubs/view.stub';
         if (!file_exists($stubPath)) {
-            $output->writeln("<error>View stub not found at: {$stubPath}</error>");
-            return Command::FAILURE;
+            $this->error("未找到视图存根文件：{$stubPath}");
+            return self::FAILURE;
         }
         $stub = file_get_contents($stubPath);
 
@@ -55,8 +65,8 @@ class MakeViewCommand extends Command
 
         file_put_contents($filePath, $content);
 
-        $output->writeln("<info>View '{$name}' created successfully at: {$filePath}</info>");
+        $this->success("视图 '{$name}' 创建成功！\n路径：[resources/views/{$name}.php]"); // 简化路径显示
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

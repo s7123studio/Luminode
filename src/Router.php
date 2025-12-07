@@ -21,53 +21,82 @@ class Router
     private array $paramRoutes = [];
     private Container $container;
 
+    private string $groupPrefix = '';
+    private array $groupMiddleware = [];
+
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
+    public function group(array $attributes, Closure $callback): void
+    {
+        // 暂存当前的分组状态
+        $previousPrefix = $this->groupPrefix;
+        $previousMiddleware = $this->groupMiddleware;
+
+        // 更新分组状态
+        if (isset($attributes['prefix'])) {
+            $this->groupPrefix .= '/' . trim($attributes['prefix'], '/');
+        }
+        
+        if (isset($attributes['middleware'])) {
+            $newMiddleware = is_array($attributes['middleware']) ? $attributes['middleware'] : [$attributes['middleware']];
+            $this->groupMiddleware = array_merge($this->groupMiddleware, $newMiddleware);
+        }
+
+        // 执行闭包，注册路由
+        $callback($this);
+
+        // 恢复之前的分组状态
+        $this->groupPrefix = $previousPrefix;
+        $this->groupMiddleware = $previousMiddleware;
+    }
+
     public function get(string $path, $callback, array $middleware = []): void
     {
-        if (strpos($path, ':') !== false) {
-            $this->addParamRoute('GET', $path, $callback, $middleware);
-        } else {
-            $this->routes['GET'][$path] = ['callback' => $callback, 'middleware' => $middleware];
-        }
+        $this->addRoute('GET', $path, $callback, $middleware);
     }
 
     public function post(string $path, $callback, array $middleware = []): void
     {
-        if (strpos($path, ':') !== false) {
-            $this->addParamRoute('POST', $path, $callback, $middleware);
-        } else {
-            $this->routes['POST'][$path] = ['callback' => $callback, 'middleware' => $middleware];
-        }
+        $this->addRoute('POST', $path, $callback, $middleware);
     }
 
     public function put(string $path, $callback, array $middleware = []): void
     {
-        if (strpos($path, ':') !== false) {
-            $this->addParamRoute('PUT', $path, $callback, $middleware);
-        } else {
-            $this->routes['PUT'][$path] = ['callback' => $callback, 'middleware' => $middleware];
-        }
+        $this->addRoute('PUT', $path, $callback, $middleware);
     }
 
     public function patch(string $path, $callback, array $middleware = []): void
     {
-        if (strpos($path, ':') !== false) {
-            $this->addParamRoute('PATCH', $path, $callback, $middleware);
-        } else {
-            $this->routes['PATCH'][$path] = ['callback' => $callback, 'middleware' => $middleware];
-        }
+        $this->addRoute('PATCH', $path, $callback, $middleware);
     }
 
     public function delete(string $path, $callback, array $middleware = []): void
     {
+        $this->addRoute('DELETE', $path, $callback, $middleware);
+    }
+
+    private function addRoute(string $method, string $path, $callback, array $middleware = []): void
+    {
+        // 应用分组前缀
+        $path = $this->groupPrefix . '/' . trim($path, '/');
+        // 确保根路径不是空的
+        if ($path !== '/') {
+             $path = rtrim($path, '/');
+        }
+        if (empty($path)) {
+            $path = '/';
+        }
+
+        // 应用分组中间件
+        $finalMiddleware = array_merge($this->groupMiddleware, $middleware);
+
         if (strpos($path, ':') !== false) {
-            $this->addParamRoute('DELETE', $path, $callback, $middleware);
+            $this->addParamRoute($method, $path, $callback, $finalMiddleware);
         } else {
-            $this->routes['DELETE'][$path] = ['callback' => $callback, 'middleware' => $middleware];
+            $this->routes[$method][$path] = ['callback' => $callback, 'middleware' => $finalMiddleware];
         }
     }
 

@@ -40,8 +40,12 @@ class Template
 
         // 如果视图中定义了布局 (通过 $this->extend('layoutName'))
         if ($this->layout) {
-            // 将捕获的视图内容存储为 'content' 区块
-            $this->sections['content'] = $content;
+            // 如果主缓冲有内容，且 'content' 区块未定义，则将其作为 content
+            // 或者：如果你希望主内容追加到 content 中，可以调整逻辑
+            // 这里我们只在 content 为空时填充它，避免覆盖 section('content') 的结果
+            if (!isset($this->sections['content']) || empty($this->sections['content'])) {
+                 $this->sections['content'] = $content;
+            }
 
             // 渲染布局
             $layoutPath = $this->resolvePath($this->layout);

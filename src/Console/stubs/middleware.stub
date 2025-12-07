@@ -1,0 +1,24 @@
+<?php
+
+namespace {{ namespace }};
+
+use Luminode\Core\Middleware\MiddlewareInterface;
+use Luminode\Core\Response;
+use DI\Container;
+use Closure;
+
+class {{ class }} implements MiddlewareInterface
+{
+    public function handle(Container $container, Closure $next): Response
+    {
+        // 在请求处理前执行逻辑
+        // ...
+
+        $response = $next($container);
+
+        // 在响应发送前执行逻辑
+        // ...
+
+        return $response;
+    }
+}

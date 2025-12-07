@@ -18,14 +18,6 @@ use Luminode\Core\Validation\Validator;
 
 class AuthController extends Controller
 {
-    protected Auth $auth;
-
-    public function __construct(Database $db, Template $template, Validator $validator, Auth $auth)
-    {
-        parent::__construct($db, $template, $validator);
-        $this->auth = $auth;
-    }
-
     public function showRegistrationForm(): Response
     {
         return $this->view('register', [], false);

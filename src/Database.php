@@ -21,20 +21,21 @@ class Database {
     private $inTransaction = false;
     private $queryLog = [];
 
-    public function __construct() {
-        // The APP_ROOT constant is expected to be defined in the bootstrap process.
-        $configPath = APP_ROOT . '/config/database.php';
-        if (!file_exists($configPath)) {
-            throw new RuntimeException("Database configuration file not found.");
+    public function __construct(Config $configService) {
+        $default = $configService->get('database.default', 'mysql');
+        $config = $configService->get("database.connections.{$default}");
+
+        if (!$config) {
+            throw new RuntimeException("Database configuration for [{$default}] not found.");
         }
-        require $configPath;
 
         try {
+            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']};charset={$config['charset']}";
             $this->pdo = new PDO(
-                "mysql:host={$config['host']};dbname={$config['dbname']}",
+                $dsn,
                 $config['username'],
                 $config['password'],
-                $config['options'] ?? []
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
         } catch (PDOException $e) {
             throw new RuntimeException("Database connection failed: " . $e->getMessage());

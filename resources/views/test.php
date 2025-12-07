@@ -1,5 +1,3 @@
-<?php $this->section('content')?>
-
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
@@ -10,5 +8,3 @@
         <h1>欢迎来到测试页面</h1>
     </body>
 </html>
-
-<?php $this->endSection()?>

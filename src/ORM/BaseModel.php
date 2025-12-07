@@ -37,6 +37,7 @@ abstract class BaseModel
     protected array $relations = [];
 
     protected bool $exists = false;
+    protected bool $timestamps = true;
 
     public function __construct(array $attributes = [])
     {
@@ -197,8 +198,14 @@ abstract class BaseModel
     public function save(): bool
     {
         $table = $this->getTable();
+        $now = date('Y-m-d H:i:s');
+
         if ($this->exists) {
             // UPDATE
+            if ($this->timestamps) {
+                $this->setAttribute('updated_at', $now);
+            }
+
             $updates = [];
             $params = [];
             foreach ($this->attributes as $key => $value) {
@@ -212,6 +219,15 @@ abstract class BaseModel
             $this->db->query($sql, $params);
         } else {
             // INSERT
+            if ($this->timestamps) {
+                if (!isset($this->attributes['created_at'])) {
+                    $this->setAttribute('created_at', $now);
+                }
+                if (!isset($this->attributes['updated_at'])) {
+                    $this->setAttribute('updated_at', $now);
+                }
+            }
+
             $columns = array_keys($this->attributes);
             $placeholders = array_fill(0, count($columns), '?');
             $sql = "INSERT INTO {$table} (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $placeholders) . ")";

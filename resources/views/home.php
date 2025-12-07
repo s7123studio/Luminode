@@ -1,3 +1,5 @@
+<?php $this->extend('layout'); ?>
+
 <?php $this->section('content'); ?>
 
 <div style="text-align: center;">

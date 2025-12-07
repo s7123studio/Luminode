@@ -1,16 +1,17 @@
 <?php
 /*
+ * @Description: 
  * @Author: 7123
+ * @version: 
  * @Date: 2025-12-01 13:04:45
  * @LastEditors: 7123
- * @LastEditTime: 2025-12-03 19:24:55
+ * @LastEditTime: 2025-12-08 03:57:29
  */
 
 use Luminode\Core\Middleware\Authenticate;
 use Luminode\Core\Middleware\CsrfMiddleware;
 use Luminode\Core\Middleware\LogRequestMiddleware;
 use Luminode\Core\Exceptions\ViewNotFoundException;
-use Luminode\Core\Response;
 
 /** @var \Luminode\Core\Router $router */
 
@@ -32,7 +33,7 @@ $router->get('/hello', function() {
 });
 
 $router->get('/user/:id', function($id) { 
-    return "你正在查看用户 ID 为：" . htmlspecialchars($id) . " 的页面。";
+    return "你正在查看用户 ID 为：" . e($id) . " 的页面。";
 });
 
 $router->get('/error-test', function() { 
@@ -41,3 +42,16 @@ $router->get('/error-test', function() {
 
 $router->get('/show-form', 'TestController@showCsrfForm');
 $router->post('/handle-form', 'TestController@handleCsrfForm', [CsrfMiddleware::class]);
+
+// --- 分组路由演示 ---
+// 访问 /admin/dashboard 即可看到效果
+$router->group(['prefix' => '/admin', 'middleware' => [Authenticate::class]], function($router) {
+    
+    $router->get('/dashboard', function() {
+        return "欢迎来到管理员仪表盘！(此前缀 /admin 由分组自动添加，且受 Authenticate 中间件保护)";
+    });
+
+    $router->get('/users', function() {
+        return "用户管理页面";
+    });
+});

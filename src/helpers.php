@@ -85,13 +85,48 @@ if (!function_exists('redirect')) {
     }
 }
 
-if (!function_exists('config')) {
+if (!function_exists('env')) {
     /**
-     * 获取配置值 (简单的示例，实际可能需要 Config 服务)
-     * 暂时只从 $_ENV 获取
+     * 获取环境变量的值
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
-    function config($key, $default = null)
+    function env(string $key, $default = null)
     {
         return $_ENV[$key] ?? $default;
     }
 }
+
+if (!function_exists('config')) {
+    /**
+     * 获取配置值
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    function config($key, $default = null)
+    {
+        try {
+            return app(\Luminode\Core\Config::class)->get($key, $default);
+        } catch (\Exception $e) {
+            return $default;
+        }
+    }
+}
+
+if (!function_exists('e')) {
+    /**
+     * 对字符串进行 HTML 转义 (htmlspecialchars 的简写)
+     *
+     * @param string $value
+     * @return string
+     */
+    function e($value): string
+    {
+        return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    }
+}
+
