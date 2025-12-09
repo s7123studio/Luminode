@@ -1,0 +1,11 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+    reportUnmatchedIgnoredErrors: true
+    excludePaths:
+        - 'src/Support/ReflectionClosure.php'
+        - 'src/Serializers/Native.php'

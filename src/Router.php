@@ -3,7 +3,7 @@
  * @Author: 7123
  * @Date: 2025-03-09 22:43:28
  * @LastEditors: 7123
- * @LastEditTime: 2025-12-03 19:21:47
+ * @LastEditTime: 2025-12-10 02:57:57
  */
 
 namespace Luminode\Core;
@@ -22,11 +22,18 @@ class Router
     private Container $container;
 
     private string $groupPrefix = '';
+    private string $groupNamespace = '';
     private array $groupMiddleware = [];
+    private array $globalMiddleware = [];
 
     public function __construct(Container $container)
     {
         $this->container = $container;
+    }
+
+    public function addMiddleware(string $middleware): void
+    {
+        $this->globalMiddleware[] = $middleware;
     }
 
     public function group(array $attributes, Closure $callback): void
@@ -34,10 +41,15 @@ class Router
         // 暂存当前的分组状态
         $previousPrefix = $this->groupPrefix;
         $previousMiddleware = $this->groupMiddleware;
+        $previousNamespace = $this->groupNamespace;
 
         // 更新分组状态
         if (isset($attributes['prefix'])) {
             $this->groupPrefix .= '/' . trim($attributes['prefix'], '/');
+        }
+        
+        if (isset($attributes['namespace'])) {
+            $this->groupNamespace .= '\\' . trim($attributes['namespace'], '\\');
         }
         
         if (isset($attributes['middleware'])) {
@@ -51,6 +63,7 @@ class Router
         // 恢复之前的分组状态
         $this->groupPrefix = $previousPrefix;
         $this->groupMiddleware = $previousMiddleware;
+        $this->groupNamespace = $previousNamespace;
     }
 
     public function get(string $path, $callback, array $middleware = []): void
@@ -142,6 +155,17 @@ class Router
 
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 
+        // URL 后缀处理 (URL Suffix)
+        if (function_exists('config')) {
+            $suffix = config('app.url_suffix');
+            if ($suffix && $path !== '/' && str_ends_with($path, $suffix)) {
+                $path = substr($path, 0, -strlen($suffix));
+                if (empty($path)) {
+                    $path = '/';
+                }
+            }
+        }
+
         $routeData = $this->findRoute($method, $path);
 
         if ($routeData === null) {
@@ -152,7 +176,18 @@ class Router
             return $this->executeCallback($routeData['callback'], $routeData['params']);
         };
 
-        $pipeline = $this->resolveMiddlewareStack($routeData['middleware'], $finalCallback);
+        // 合并全局中间件和路由特定的中间件
+        // 全局中间件应该先执行（所以在洋葱模型中应该放在数组后面？不，洋葱模型是 reverse 的）
+        // 假设我们希望全局中间件包裹路由中间件： Global(Route(App))
+        // 那么 pipeline 构造顺序应该是：Route -> Global
+        // resolveMiddlewareStack 是 reverse 遍历的。
+        // 如果我们传入 [Global, Route]，reverse 后是 Route, Global。
+        // pipeline = Global(Route(App))。
+        // 所以顺序应该是 array_merge($globalMiddleware, $routeMiddleware)
+        
+        $allMiddleware = array_merge($this->globalMiddleware, $routeData['middleware']);
+
+        $pipeline = $this->resolveMiddlewareStack($allMiddleware, $finalCallback);
 
         return $pipeline($this->container);
     }
@@ -209,7 +244,18 @@ class Router
 
         if (is_string($callback) && strpos($callback, '@') !== false) {
             list($controllerName, $methodName) = explode('@', $callback, 2);
-            $controllerClass = "App\\Controllers\\" . $controllerName;
+            
+            // 命名空间处理逻辑
+            if (str_starts_with($controllerName, '\\')) {
+                // 如果是 FQCN (以 \ 开头)，直接使用，不拼接任何前缀
+                $controllerClass = $controllerName;
+            } else {
+                // 拼接基础命名空间 + 分组命名空间 + 控制器名
+                // 默认基础命名空间是 App\Controllers
+                // 注意：groupNamespace 已经包含了开头的 \ (如果有设置)
+                $namespace = 'App\\Controllers' . $this->groupNamespace;
+                $controllerClass = $namespace . '\\' . $controllerName;
+            }
 
             if (!class_exists($controllerClass)) {
                 throw new Exception("未找到控制器类：{$controllerClass}");
@@ -224,6 +270,7 @@ class Router
             $result = call_user_func_array([$controllerInstance, $methodName], $params);
 
         } elseif (is_callable($callback)) {
+
             $result = call_user_func_array($callback, $params);
         } else {
             throw new Exception("无效的路由回调函数。");

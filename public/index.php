@@ -40,6 +40,9 @@ try {
     // 获取 Router
     $router = $container->get(Router::class);
 
+    // 注册全局中间件
+    $router->addMiddleware(\Luminode\Core\Middleware\CheckForMaintenanceMode::class);
+
     // 加载全局辅助函数 (如果 Composer 未自动加载)
     if (file_exists(dirname(__DIR__) . '/src/helpers.php')) {
         require_once dirname(__DIR__) . '/src/helpers.php';

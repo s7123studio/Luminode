@@ -25,26 +25,14 @@ use Luminode\Core\Console\Commands\DoctorCommand;
 use Luminode\Core\Console\Commands\MakeMiddlewareCommand;
 use Luminode\Core\Console\Commands\LogClearCommand;
 use Luminode\Core\Console\Commands\MakeRouteCommand;
+use Luminode\Core\Console\Commands\DownCommand;
+use Luminode\Core\Console\Commands\UpCommand;
+use Luminode\Core\Console\Commands\FixCommand;
 
 // 创建命令行应用实例
 $application = new Application('Open Luminode CLI', '2.1.0');
 
-// --- 汉化默认命令描述 ---
-try {
-    $defaultCommands = [
-        'list' => '列出可用命令',
-        'help' => '显示命令帮助信息',
-        'completion' => '生成 Shell 自动补全脚本'
-    ];
-    foreach ($defaultCommands as $name => $desc) {
-        if ($application->has($name)) {
-            $command = $application->get($name);
-            $command->setDescription($desc);
-        }
-    }
-} catch (\Throwable $e) {
-    // 忽略错误
-}
+// ... (descriptor logic) ...
 
 // --- 手动注册所有命令 ---
 // 使用 DI 容器来创建命令实例，以便自动注入依赖
@@ -58,6 +46,9 @@ $application->add($container->get(DoctorCommand::class));
 $application->add($container->get(MakeMiddlewareCommand::class));
 $application->add($container->get(LogClearCommand::class));
 $application->add($container->get(MakeRouteCommand::class));
+$application->add($container->get(DownCommand::class));
+$application->add($container->get(UpCommand::class));
+$application->add($container->get(FixCommand::class));
 
 // 运行应用
 $application->run();

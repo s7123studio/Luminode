@@ -10,4 +10,6 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'timezone' => 'Asia/Shanghai',
     'locale' => 'zh-CN',
+    // URL 后缀，例如 '.html'。留空则不启用。
+    'url_suffix' => env('URL_SUFFIX', ''),
 ];
