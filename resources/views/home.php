@@ -8,7 +8,7 @@
 </div>
 
 <div style="margin-top: 2rem; padding: 1rem 2rem; border: 1px solid #ddd; border-radius: 8px; background-color: #fff;">
-    <h2>文章列表 (来自MySQL数据库)</h2>
+    <h2>文章列表 (来自数据库)</h2>
     <hr>
     <?php if (empty($posts)): ?>
         <p>数据库中没有找到文章，或者数据库未正确配置。</p>

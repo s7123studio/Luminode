@@ -30,15 +30,46 @@ class Database {
         }
 
         try {
-            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']};charset={$config['charset']}";
-            $this->pdo = new PDO(
-                $dsn,
-                $config['username'],
-                $config['password'],
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-            );
+            $dsn = $this->createDsn($config);
+            $username = $config['username'] ?? null;
+            $password = $config['password'] ?? null;
+            $options = $config['options'] ?? [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ];
+
+            $this->pdo = new PDO($dsn, $username, $password, $options);
         } catch (PDOException $e) {
             throw new RuntimeException("Database connection failed: " . $e->getMessage());
+        }
+    }
+
+    private function createDsn(array $config): string
+    {
+        $driver = $config['driver'];
+
+        switch ($driver) {
+            case 'sqlite':
+                // Debug: 打印实际使用的数据库路径，确认与 CLI 初始化的是同一个文件
+                // die("SQLite Path: " . $config['database']); 
+                return "sqlite:{$config['database']}";
+            
+            case 'mysql':
+                $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
+                if (isset($config['unix_socket']) && !empty($config['unix_socket'])) {
+                    $dsn = "mysql:unix_socket={$config['unix_socket']};dbname={$config['database']}";
+                }
+                if (isset($config['charset'])) {
+                    $dsn .= ";charset={$config['charset']}";
+                }
+                return $dsn;
+
+            case 'pgsql':
+                return "pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']};";
+
+            default:
+                throw new RuntimeException("Unsupported database driver: {$driver}");
         }
     }
 

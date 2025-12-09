@@ -117,6 +117,19 @@ if (!function_exists('config')) {
     }
 }
 
+if (!function_exists('database_path')) {
+    /**
+     * 获取 database 目录的路径
+     *
+     * @param string $path
+     * @return string
+     */
+    function database_path($path = '')
+    {
+        return APP_ROOT . '/database' . ($path ? DIRECTORY_SEPARATOR . $path : '');
+    }
+}
+
 if (!function_exists('e')) {
     /**
      * 对字符串进行 HTML 转义 (htmlspecialchars 的简写)
